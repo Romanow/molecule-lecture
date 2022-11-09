@@ -1,0 +1,7 @@
+.idea/
+.vagrant/
+*.log
+*.iml
+*.iws
+*.ipr
+.vault_pass

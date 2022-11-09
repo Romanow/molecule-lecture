@@ -1,0 +1,4 @@
+ansible~=6.5
+molecule>=4.0
+ansible-lint>=6.8
+molecule-docker>=2.1

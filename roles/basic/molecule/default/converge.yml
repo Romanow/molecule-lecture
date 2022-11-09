@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include romanowalex.firewall"
+      include_role:
+        name: "romanowalex.firewall"

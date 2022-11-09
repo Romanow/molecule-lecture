@@ -1,0 +1,10 @@
+---
+# defaults file for basic
+basic_packages:
+  - ca-certificates
+  - apt-transport-https
+  - software-properties-common
+  - net-tools
+  - zip
+  - unzip
+  - jq
