@@ -1,7 +1,13 @@
 .idea/
-.vagrant/
 *.log
 *.iml
 *.iws
 *.ipr
-.vault_pass
+**/.vagrant/
+**/.terraform/*
+**/.terragrunt-cache/*
+*.tfplan
+*.tfstate
+*.tfstate.*
+*.auto.tfvars
+**/.vault_pass

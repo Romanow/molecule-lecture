@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+
+servers = [
+    {
+        :hostname => "postgres-master",
+        :ip => "192.168.56.100",
+        :box => "romanow/ansible-box",
+        :version => "22.04",
+        :ram => 1024,
+        :cpu => 1
+    },
+    {
+        :hostname => "postgres-slave",
+        :ip => "192.168.56.101",
+        :box => "romanow/ansible-box",
+        :version => "22.04",
+        :ram => 1024,
+        :cpu => 1
+    },
+    {
+        :hostname => "pgpool",
+        :ip => "192.168.56.102",
+        :box => "romanow/ansible-box",
+        :version => "22.04",
+        :ram => 1024,
+        :cpu => 1
+    }
+]
+
+Vagrant.configure(2) do |config|
+  config.ssh.username = "ansible"
+  config.ssh.password = "root"
+
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.vm.box = machine[:box]
+      node.vm.box_version = machine[:version]
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip]
+
+      config.vm.provider "virtualbox" do |vm|
+        vm.memory = machine[:ram]
+        vm.cpus = machine[:cpu]
+      end
+    end
+
+    config.vm.provision "shell" do |s|
+      ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+      s.inline = <<-SHELL
+            echo #{ssh_pub_key} >> /home/ansible/.ssh/authorized_keys
+      SHELL
+    end
+  end
+end

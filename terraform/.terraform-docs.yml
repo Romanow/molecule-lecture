@@ -1,0 +1,16 @@
+formatter: markdown
+header-from: main.tf
+sort:
+  enabled: false
+settings:
+  html: false
+
+output:
+  file: README.md
+  mode: inject
+
+sections:
+  show:
+    - providers
+    - inputs
+    - outputs
