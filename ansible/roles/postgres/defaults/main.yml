@@ -11,7 +11,7 @@ shared_buffers: "{{ (ansible_memtotal_mb / 4) | round | int }}"
 postgres:
   version: 15
   conf_dir: /etc/postgresql/15/main
-  data_dir: /var/lib/postgsql/15/main
+  data_dir: /var/lib/postgresql/15/main
   log_dir: /var/log/postgresql
   timezone: "Europe/Moscow"
   listen_port: 5432
@@ -36,3 +36,7 @@ databases: []
 users: []
 
 privileges: []
+
+replication:
+  user: replication
+  password: "{{ vault_replication_passwd }}"

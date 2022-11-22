@@ -1,6 +1,6 @@
 ---
 # postgres playbook
-- hosts: master
+- hosts: postgres
   become: yes
   roles:
     - postgres

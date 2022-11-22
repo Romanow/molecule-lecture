@@ -1,0 +1,52 @@
+---
+# master task for postgres
+- name: Create users
+  postgresql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    role_attr_flags: "{{ item.attributes | join(',') }}"
+  with_items: "{{ users }}"
+  become_user: postgres
+  become: yes
+
+- name: Create databases
+  postgresql_db:
+    name: "{{ item.name }}"
+  with_items: "{{ databases }}"
+  become_user: postgres
+  become: yes
+
+- name: Grant privileges to users
+  postgresql_privs:
+    roles: "{{ item.user }}"
+    database: postgres
+    type: "{{ item.type }}"
+    objs: "{{ item.name }}"
+    privs: "{{ item.privilege }}"
+  with_items: "{{ privileges }}"
+  become_user: postgres
+  become: yes
+
+- name: Configure access
+  postgresql_pg_hba:
+    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
+    contype: host
+    users: "{{ item.name }}"
+    source: 0.0.0.0/0
+  with_items: "{{ users }}"
+
+- name: Create replication user
+  postgresql_user:
+    name: "{{ replication.user }}"
+    password: "{{ replication.password }}"
+    role_attr_flags: REPLICATION,LOGIN
+  become_user: postgres
+  become: yes
+
+- name: Configure access
+  postgresql_pg_hba:
+    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
+    contype: host
+    databases: replication
+    users: "{{ replication.user }}"
+    source: "{{ slave_ip_address }}"
