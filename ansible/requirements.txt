@@ -3,3 +3,4 @@ molecule>=4.0
 ansible-lint>=6.8
 molecule-docker>=2.1
 yamllint>=1.28
+netaddr>=0.8.0

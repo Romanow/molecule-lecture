@@ -1,0 +1,44 @@
+---
+# slave task for postgres
+- name: Wait for Master node
+  wait_for:
+    host: "{{ master_ip_address }}"
+    port: 5432
+    delay: 10
+
+- name: Check required syncronization
+  stat:
+    path: "{{ postgres.conf_dir }}/replication.done"
+  register: replication_required_file
+
+- name: Sync database
+  block:
+    - name: Remove database folder
+      file:
+        path: "{{ postgres.data_dir }}"
+        state: absent
+
+    - name: Fetch data from master
+      shell: |
+        PGPASSWORD="{{ replication.password }}" \
+        pg_basebackup \
+          --write-recovery-conf \
+          --format=plain \
+          --wal-method=stream \
+          --verbose \
+          -h "{{ master_ip_address }}" \
+          -p "{{ postgres.listen_port }}" \
+          -U "{{ replication.user }}" \
+          -D "{{ postgres.data_dir }}" > "{{ postgres.conf_dir }}/replication.done"
+      args:
+        chdir: "{{ postgres.conf_dir }}"
+        creates: "replication.done"
+
+  become_user: postgres
+  become: yes
+  when: not replication_required_file.stat.exists
+
+- name: Restart Postgres
+  systemd:
+    name: postgresql
+    state: restarted

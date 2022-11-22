@@ -23,6 +23,17 @@ effective_io_concurrency = {{ postgres.config.effective_io_concurrency }}
 wal_buffers = {{ postgres.replication.wal_buffers }}
 min_wal_size = {{ postgres.replication.min_wal_size }}
 max_wal_size = {{ postgres.replication.max_wal_size }}
+max_wal_senders = 10
+
+{% if 'master' in group_names %}
+wal_level = replica
+wal_keep_size = 128MB
+{% else %}
+hot_standby = on
+hot_standby_feedback = on
+primary_conninfo = 'host={{ master_ip_address }} port={{ postgres.listen_port }} user={{ replication.user }} password={{ replication.password }}'
+promote_trigger_file = '{{ postgres.data_dir }}/replication.finish'
+{% endif %}
 
 log_destination = 'stderr'
 logging_collector = on
@@ -34,7 +45,7 @@ log_rotation_size = 100MB
 
 log_timezone = {{ postgres.timezone }}
 
-log_min_messages = info
+log_min_messages = debug
 log_min_error_statement = error
 log_min_duration_statement = 1000
 

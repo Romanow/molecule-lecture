@@ -14,3 +14,15 @@ $ ansible-playbook -i inventories/local/hosts.yml --list-hosts --list-tasks post
     
 $ ansible-playbook -i inventories/local/hosts.yml --vault-password-file=.vault_pass postgres.yml 
 ```
+
+Проверка работоспособности:
+
+```shell
+# на master
+$ sudo -u postgres psql
+$ psql: SELECT client_addr, state FROM pg_stat_replication;
+
+# на slave
+$ sudo -u postgres psql
+$ psql: SELECT now() - pg_last_xact_replay_timestamp();
+```

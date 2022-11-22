@@ -11,37 +11,21 @@
 - name: Configure Postrges
   template:
     src: "templates/postgres.conf.j2"
-    dest: "{{ postgres.conf_dir }}"
+    dest: "{{ postgres.conf_dir }}/postgresql.conf"
     owner: postgres
     group: postgres
-    mode: 0640
-    backup: yes
-  notify:
-    - restart postgres
+    mode: 0644
 
-- name: Create users
-  postgresql_user:
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    role_attr_flags: "{{ item.attributes | join(',') }}"
-  with_items: "{{ users }}"
-  become_user: postgres
-  become: yes
+- name: Configure Master node
+  include_tasks:
+    file: master.yml
+    apply:
+      tags: [ all, postgres, configure ]
+  when: "'master' in group_names"
 
-- name: Create databases
-  postgresql_db:
-    name: "{{ item.name }}"
-  with_items: "{{ databases }}"
-  become_user: postgres
-  become: yes
-
-- name: Grant privileges to users
-  postgresql_privs:
-    roles: "{{ item.user }}"
-    database: postgres
-    type: "{{ item.type }}"
-    objs: "{{ item.name }}"
-    privs: "{{ item.privilege }}"
-  with_items: "{{ privileges }}"
-  become_user: postgres
-  become: yes
+- name: Configure Slave node
+  include_tasks:
+    file: slave.yml
+    apply:
+      tags: [ all, postgres, configure ]
+  when: "'slave' in group_names"

@@ -36,3 +36,6 @@
 ### Запуск
 
 ## Ссылки
+
+1. [Postgres replication configuration](https://www.postgresql.org/docs/current/runtime-config-replication.html)
+2. [How To Set Up Physical Streaming Replication with PostgreSQL 12 on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-physical-streaming-replication-with-postgresql-12-on-ubuntu-20-04)

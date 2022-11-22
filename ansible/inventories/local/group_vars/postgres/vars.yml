@@ -1,5 +1,8 @@
 ---
 # inventories file postgres local group
+master_ip_address: "{{ hostvars['postgres-master.local']['ansible_host'] }}"
+slave_ip_address: "{{ hostvars['postgres-slave.local']['ansible_host'] }}"
+
 firewall:
   enabled: true
   rules:
