@@ -1,0 +1,25 @@
+---
+# inventories file postgres local group
+firewall:
+  enabled: true
+  rules:
+    - name: postgres
+      port: 5432
+      policy: allow
+      direction: in
+      protocol: tcp
+
+databases:
+  - name: orders
+
+users:
+  - name: program
+    password: "{{ vault_program_passwd }}"
+    attributes:
+      - LOGIN
+
+privileges:
+  - name: orders
+    type: database
+    user: program
+    privilege: ALL

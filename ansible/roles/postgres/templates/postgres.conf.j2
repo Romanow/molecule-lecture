@@ -1,0 +1,42 @@
+listen_addresses = '{{ postgres.listen_addresses }}'
+port = {{ postgres.listen_port }}
+
+timezone = {{ postgres.timezone }}
+
+data_directory = '{{ postgres.data_dir }}'
+hba_file = '{{ postgres.conf_dir }}/pg_hba.conf'
+ident_file = '{{ postgres.conf_dir }}/pg_ident.conf'
+
+password_encryption = md5
+
+max_connections = {{ postgres.max_connections }}
+
+shared_buffers = {{ postgres.config.shared_buffers }}
+effective_cache_size = {{ postgres.config.effective_cache_size }}
+maintenance_work_mem = {{ postgres.config.maintenance_work_mem }}
+checkpoint_completion_target = {{ postgres.config.checkpoint_completion_target }}
+work_mem = {{ postgres.config.work_mem }}
+default_statistics_target = {{ postgres.config.default_statistics_target }}
+random_page_cost = {{ postgres.config.random_page_cost }}
+effective_io_concurrency = {{ postgres.config.effective_io_concurrency }}
+
+wal_buffers = {{ postgres.replication.wal_buffers }}
+min_wal_size = {{ postgres.replication.min_wal_size }}
+max_wal_size = {{ postgres.replication.max_wal_size }}
+
+log_destination = 'stderr'
+logging_collector = on
+log_directory = '{{ postgres.log_dir }}'
+log_filename = 'postgresql-%Y-%m-%d.log'
+log_file_mode = 0640
+log_rotation_age = 1d
+log_rotation_size = 100MB
+
+log_timezone = {{ postgres.timezone }}
+
+log_min_messages = info
+log_min_error_statement = error
+log_min_duration_statement = 1000
+
+log_line_prefix = '%m [%p] %q%u@%d '
+debug_pretty_print = on

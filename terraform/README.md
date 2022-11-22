@@ -22,6 +22,12 @@ $ terraform plan --out main.tfplan
 $ terraform apply main.tfplan
 ```
 
+Создаются 3 VM:
+
+* Postgres Master `postgres-master.romanow-alex.ru`
+* Postgres Slave `postgres-slave.romanow-alex.ru`
+* PgPool II `pgpool.romanow-alex.ru`
+
 ## Обновление описания модуля
 
 Конфигурация [terraform-docs](https://terraform-docs.io/) находится в [.terraform-docs.yml](.terraform-docs.yml).
@@ -29,7 +35,9 @@ $ terraform apply main.tfplan
 ```shell
 $ terraform-docs markdown table .
 ```
+
 <!-- BEGIN_TF_DOCS -->
+
 ## Providers
 
 | Name | Version |
@@ -52,4 +60,5 @@ $ terraform-docs markdown table .
 | Name | Description |
 |------|-------------|
 | <a name="output_instance_ip_address"></a> [instance\_ip\_address](#output\_instance\_ip\_address) | VM ip addresses |
+
 <!-- END_TF_DOCS -->

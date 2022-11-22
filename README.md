@@ -24,20 +24,12 @@
 
 ## Пример
 
-[Vagrant](vagrant/README.md)
-
 ### Подготовка
 
-```shell
-# создаем virtual environment
-$ python3 -m venv ~/.ansible-env/
+* Локальные VM с использованием [vagrant](vagrant/README.md)
+* Cloud VM в [DigitalOcean](terraform/README.md)
 
-$ . ~/.ansible-env/bin/activate.fish
-
-$ pip3 install -r requirements.txt
-
-$ echo root > .vault_pass
-```
+[Настройка скриптов Ansible](ansible/README.md)
 
 ### Формулировка задачи
 

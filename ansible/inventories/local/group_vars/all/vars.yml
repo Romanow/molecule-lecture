@@ -1,6 +1,15 @@
 ---
-# file: inventories/local/group_vars/all/vars.yml
+# inventories file all local group
 ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "ansible"
 ansible_ssh_pass: "{{ vault_ansible_pass }}"
 ansible_become_pass: "{{ vault_ansible_pass }}"
+
+user_accounts:
+  - name: ronin
+    comment: Romanov Alexey
+    shell: /usr/bin/fish
+    public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9CkHdZ6qgaXbPia0B9kujIsV452wwfS/6blpCGcH4RVOKzvrHZkNfvJNdsFmlOvKOXVJ+KiFCXkzXfQUxvHARxp8Xkcte6TSYBkXMG2f3xpUMvjFOuo6sI9L6dua30hKJqzjTbiBoPF49QNKSKKXrUuFnhSIJegxhcUfKt3e+6cM2CqsscSCdG5slkVF40iuoCJEumYL5fBoRTJeEneE3DbeCFzfkt++J4XCBuZERZL+bbv/fLKgUB//lrRtygqsKA1VM7LrKli6Bty4jsPP0LUWvohj/9fGL95X1ZRoX2tOdn8RecE53RqwDHaWai1LdZFHv2FLAEUIJkyc7ZR6w5l9pYNOGn7psuDFNeSjB8rSoBROub3SGcM+G5WcdeBBRwOXYugSMZPZjWHk0dk4pdIGEOz0E+ZXVkh5v+7CVIt02m5k+qCCjNGWN4B0hkL+iTTPCj2nT4snQsMQbb6fwFiEzhBFHjSmOojl/ALxJfN/KfbF27EH27W3EdwU5MF0= aromanov@inno.tech"
+    groups:
+      - sudo
+      - adm

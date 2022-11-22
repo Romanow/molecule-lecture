@@ -1,0 +1,25 @@
+---
+# firewall task for basic
+- name: Enable SSH
+  ufw:
+    rule: allow
+    port: ssh
+    comment: "ssh"
+
+- name: Configure IPtables
+  ufw:
+    rule: "{{ item.policy }}"
+    direction: "{{ item.direction }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.protocol }}"
+    comment: "{{ item.name | default ('') }}"
+  with_items:
+    - "{{ firewall.rules }}"
+  notify:
+    - restart ufw
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming

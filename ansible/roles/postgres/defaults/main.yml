@@ -1,0 +1,38 @@
+---
+# main defaults file for basic
+storage_type: 'ssd'
+random_page_cost_ssd: 1.1
+random_page_cost_hdd: 4
+effective_io_concurrency_ssd: 200
+effective_io_concurrency_hdd: 2
+max_connections: 100
+shared_buffers: "{{ (ansible_memtotal_mb / 4) | round | int }}"
+
+postgres:
+  version: 15
+  conf_dir: /etc/postgresql/15/main
+  data_dir: /var/lib/postgsql/15/main
+  log_dir: /var/log/postgresql
+  timezone: "Europe/Moscow"
+  listen_port: 5432
+  listen_addresses: "*"
+  max_connections: "{{ max_connections }}"
+  config:
+    shared_buffers: "{{ shared_buffers }}MB"
+    work_mem: "{{ ((ansible_memtotal_mb - shared_buffers|int) * 1024 / (max_connections * ansible_processor_cores * ansible_processor_threads_per_core * 3)) | round | int }}kB"
+    effective_cache_size: "{{ (ansible_memtotal_mb * 3 / 4) | round | int }}MB"
+    maintenance_work_mem: "{{ (ansible_memtotal_mb / 16) | round | int }}MB"
+    random_page_cost: "{{ (storage_type == 'ssd') | ternary(random_page_cost_ssd, random_page_cost_hdd) }}"
+    effective_io_concurrency: "{{ (storage_type == 'ssd') | ternary(effective_io_concurrency_ssd, effective_io_concurrency_hdd) }}"
+    checkpoint_completion_target: 0.7
+    default_statistics_target: 100
+  replication:
+    wal_buffers: "{{ (shared_buffers|int * 3 / 100) | round | int }}MB"
+    min_wal_size: "1GB"
+    max_wal_size: "4GB"
+
+databases: []
+
+users: []
+
+privileges: []

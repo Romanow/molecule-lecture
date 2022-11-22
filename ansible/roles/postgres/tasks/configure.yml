@@ -1,0 +1,47 @@
+---
+# configure task for postgres
+- name: Install required library
+  block:
+    - apt:
+        name: libpq-dev
+        state: fixed
+    - pip:
+        name: psycopg2
+
+- name: Configure Postrges
+  template:
+    src: "templates/postgres.conf.j2"
+    dest: "{{ postgres.conf_dir }}"
+    owner: postgres
+    group: postgres
+    mode: 0640
+    backup: yes
+  notify:
+    - restart postgres
+
+- name: Create users
+  postgresql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    role_attr_flags: "{{ item.attributes | join(',') }}"
+  with_items: "{{ users }}"
+  become_user: postgres
+  become: yes
+
+- name: Create databases
+  postgresql_db:
+    name: "{{ item.name }}"
+  with_items: "{{ databases }}"
+  become_user: postgres
+  become: yes
+
+- name: Grant privileges to users
+  postgresql_privs:
+    roles: "{{ item.user }}"
+    database: postgres
+    type: "{{ item.type }}"
+    objs: "{{ item.name }}"
+    privs: "{{ item.privilege }}"
+  with_items: "{{ privileges }}"
+  become_user: postgres
+  become: yes

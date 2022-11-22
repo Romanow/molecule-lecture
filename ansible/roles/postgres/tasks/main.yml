@@ -1,0 +1,16 @@
+---
+# main tasks file for postgres
+- name: Install Postgres {{ postgres.version }}
+  include_tasks:
+    file: install.yml
+    apply:
+      tags: [ all, postgres ]
+  tags: [ all, postgres ]
+  when: "'postgresql-15' not in ansible_facts.packages"
+
+- name: Configure Postgres
+  include_tasks:
+    file: configure.yml
+    apply:
+      tags: [ all, postgres, configure ]
+  tags: [ all, postgres, configure ]

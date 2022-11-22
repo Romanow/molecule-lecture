@@ -1,5 +1,5 @@
 ---
-# defaults file for basic
+# main defaults file for basic
 basic_packages:
   - ca-certificates
   - apt-transport-https
@@ -7,4 +7,10 @@ basic_packages:
   - net-tools
   - zip
   - unzip
-  - jq
+
+developer_group: developers
+user_accounts: []
+
+firewall:
+  enabled: false
+  rules: [ ]

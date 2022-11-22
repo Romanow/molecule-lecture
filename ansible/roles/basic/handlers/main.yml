@@ -1,0 +1,6 @@
+---
+# main handlers file for basic
+- name: restart ufw
+  service:
+    name: ufw
+    state: restarted

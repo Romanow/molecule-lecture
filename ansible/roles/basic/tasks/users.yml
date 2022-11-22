@@ -1,0 +1,36 @@
+---
+# users task for basic
+- name: Create {{ developer_group }} group
+  group:
+    name: "{{ developer_group }}"
+    state: present
+
+- name: Get existing users
+  shell: 'grep developers /etc/group | cut -d: -f4 | tr "," "\n"'
+  changed_when: false
+  register: existing_users
+
+- name: Existing users
+  debug:
+    msg: "{{ existing_users.stdout_lines }}"
+  tags: [ never, debug ]
+
+- name: Calculate users
+  set_fact:
+    users_for_remove: "{{ existing_users.stdout_lines | difference(user_accounts | map(attribute='name')) }}"
+
+- name: Users for remove
+  debug:
+    msg: "{{ users_for_remove }}"
+  tags: [ never, debug ]
+
+- name: Create users
+  include_tasks: user.yml
+  with_items: "{{ user_accounts }}"
+
+- name: Delete users {{ users_for_remove }}
+  user:
+    name: "{{ item }}"
+    state: absent
+    remove: yes
+  with_items: "{{ users_for_remove }}"

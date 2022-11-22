@@ -1,11 +1,13 @@
 ---
-# meta file for basic
+# meta file for postgres
 galaxy_info:
-  role_name: basic
+  role_name: postgres
   namespace: romanowalex
   author: Romanov Alex (romanowalex@mail.ru)
-  description: Basic configuration
+  description: Install and configure Postgres
   license: Apache-2.0
   min_ansible_version: "2.10"
   platforms:
     - name: Ubuntu
+dependencies:
+  - name: basic

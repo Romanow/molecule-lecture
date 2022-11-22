@@ -1,0 +1,23 @@
+---
+# install task for postgres
+- name: Add Postrges key
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: Add Postgres repository
+  apt_repository:
+    repo: "deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    update_cache: yes
+    state: present
+
+- name: Install Postgres {{ postgres.version }}
+  apt:
+    name: "postgresql-{{ postgres.version }}"
+    state: present
+
+- name: Ensure Postgres service is running
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
