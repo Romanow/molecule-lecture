@@ -15,6 +15,7 @@ jobs:
 
       - name: Check Terraform
         run: |-
+          cd terrraform
           terraform fmt -check
           terraform init
           terraform validate
@@ -22,8 +23,8 @@ jobs:
       - name: Test Scenarious
         run: |-
           shopt -s extglob
-          pip3 install -r ./ansible/requirements.txt
-          for dir in ./ansible/roles/*; do
-            cd "$dir"
-            molecule converge
+          cd ansible
+          pip3 install -r requirements.txt
+          for dir in roles/*; do
+            (cd "$dir"; molecule converge)
           done

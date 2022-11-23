@@ -43,9 +43,11 @@ provisioner:
   config_options:
     defaults:
       vault_password_file: "${MOLECULE_SCENARIO_DIRECTORY}/.vault_pass"
+      allow_world_readable_tmpfiles: true
+      remote_tmp: "~/.ansible/tmp"
   inventory:
     links:
-      group_vars: ${MOLECULE_PROJECT_DIRECTORY}/../../inventories/local/group_vars/
+      group_vars: "${MOLECULE_PROJECT_DIRECTORY}/../../inventories/local/group_vars/"
 verifier:
   name: ansible
 lint: |
