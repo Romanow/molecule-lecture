@@ -7,13 +7,23 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Check Terraform
+        run: |-
+          terraform fmt -check
+          terraform init
+          terraform validate
 
       - name: Test Scenarious
         run: |-
           shopt -s extglob
-          pip3 install -r requirements.txt
-          for dir in ./roles/*; do
+          pip3 install -r ./ansible/requirements.txt
+          for dir in ./ansible/roles/*; do
             cd "$dir"
             molecule converge
           done
