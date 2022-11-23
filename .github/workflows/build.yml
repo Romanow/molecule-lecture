@@ -11,7 +11,7 @@ jobs:
 
       - name: Test Scenarious
         run: |-
-          shopt -e
+          shopt -s extglob
           pip3 install -r requirements.txt
           for dir in ./roles/*; do
             cd "$dir"
