@@ -1,0 +1,20 @@
+---
+basic_packages: [ ]
+user_accounts: [ ]
+firewall:
+  enabled: false
+  rules: [ ]
+
+databases:
+  - name: services
+
+users:
+  - name: test
+    password: test
+    attributes: []
+
+privileges:
+  - name: orders
+    type: database
+    user: program
+    privilege: ALL

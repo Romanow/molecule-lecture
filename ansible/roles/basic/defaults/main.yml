@@ -9,8 +9,8 @@ basic_packages:
   - unzip
 
 developer_group: developers
-user_accounts: []
 
+user_accounts: []
 firewall:
   enabled: false
-  rules: [ ]
+  rules: []

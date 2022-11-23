@@ -2,30 +2,32 @@
 # configure task for postgres
 - name: Install required library
   block:
-    - apt:
+    - name: Install libpq-dev
+      ansible.builtin.apt:
         name: libpq-dev
         state: fixed
-    - pip:
+    - name: Install psycopg2
+      ansible.builtin.pip:
         name: psycopg2
 
 - name: Configure Postrges
-  template:
-    src: "templates/postgres.conf.j2"
+  ansible.builtin.template:
+    src: templates/postgres.conf.j2
     dest: "{{ postgres.conf_dir }}/postgresql.conf"
     owner: postgres
     group: postgres
     mode: 0644
 
 - name: Configure Master node
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: master.yml
     apply:
-      tags: [ all, postgres, configure ]
+      tags: [all, postgres, configure]
   when: "'master' in group_names"
 
 - name: Configure Slave node
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: slave.yml
     apply:
-      tags: [ all, postgres, configure ]
+      tags: [all, postgres, configure]
   when: "'slave' in group_names"

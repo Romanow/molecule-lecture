@@ -1,0 +1,19 @@
+---
+basic_packages: []
+
+user_accounts:
+  - name: ronin
+    comment: Test User
+    shell: /bin/bash
+    groups:
+      - sudo
+      - adm
+
+firewall:
+  enabled: true
+  rules:
+    - name: postgres
+      port: 5432
+      policy: allow
+      direction: in
+      protocol: tcp

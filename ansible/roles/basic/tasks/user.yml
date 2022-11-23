@@ -1,22 +1,23 @@
 ---
 # user task for basic
 - name: Create user {{ item.name }}
-  user:
+  ansible.builtin.user:
     name: "{{ item.name }}"
     password: ""
-    groups: "{{ item.groups + [ developer_group ] }}"
+    groups: "{{ item.groups + [developer_group] }}"
     shell: "{{ item.shell }}"
     comment: "{{ item.comment }}"
     update_password: on_create
-    append: yes
+    append: true
   register: user_updated
 
-- name: Expire {{ item.name }} password
-  shell: "passwd -e {{ item.name }}"
+- name: Expire password {{ item.name }}
+  ansible.builtin.shell: passwd -e {{ item.name }}
   when: user_updated.changed
 
 - name: Add SSH key for {{ item.name }}
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ item.name }}"
     key: "{{ item.public_key }}"
     state: present
+  when: item.public_key is defined

@@ -1,25 +1,28 @@
 ---
 # slave task for postgres
 - name: Wait for Master node
-  wait_for:
+  ansible.builtin.wait_for:
     host: "{{ master_ip_address }}"
     port: 5432
     delay: 10
 
 - name: Check required syncronization
-  stat:
+  ansible.builtin.stat:
     path: "{{ postgres.conf_dir }}/replication.done"
   register: replication_required_file
 
 - name: Sync database
+  become_user: postgres
+  become: true
+  when: not replication_required_file.stat.exists
   block:
     - name: Remove database folder
-      file:
+      ansible.builtin.file:
         path: "{{ postgres.data_dir }}"
         state: absent
 
     - name: Fetch data from master
-      shell: |
+      ansible.builtin.shell: |
         PGPASSWORD="{{ replication.password }}" \
         pg_basebackup \
           --write-recovery-conf \
@@ -32,13 +35,9 @@
           -D "{{ postgres.data_dir }}" > "{{ postgres.conf_dir }}/replication.done"
       args:
         chdir: "{{ postgres.conf_dir }}"
-        creates: "replication.done"
-
-  become_user: postgres
-  become: yes
-  when: not replication_required_file.stat.exists
+        creates: replication.done
 
 - name: Restart Postgres
-  systemd:
+  ansible.builtin.systemd:
     name: postgresql
     state: restarted

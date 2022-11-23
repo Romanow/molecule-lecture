@@ -1,27 +1,24 @@
 ---
 # main tasks file for basic
 - name: Get package facts
-  package_facts:
-  tags: [ always ]
-
+  ansible.builtin.package_facts:
+  tags: [always]
 - name: Install packages
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: packages.yml
     apply:
-      tags: [ all, packages ]
-  tags: [ all, packages ]
-
+      tags: [all, packages]
+  tags: [all, packages]
 - name: Manage users
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: users.yml
     apply:
-      tags: [ all, users ]
-  tags: [ all, users ]
-
+      tags: [all, users]
+  tags: [all, users]
 - name: Configure firewall
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: firewall.yml
     apply:
-      tags: [ all, firewall ]
-  tags: [ all, firewall ]
+      tags: [all, firewall]
+  tags: [all, firewall]
   when: firewall.enabled

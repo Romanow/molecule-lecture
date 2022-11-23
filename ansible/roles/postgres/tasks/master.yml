@@ -1,23 +1,23 @@
 ---
 # master task for postgres
 - name: Create users
-  postgresql_user:
+  community.postgresql.postgresql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.attributes | join(',') }}"
   with_items: "{{ users }}"
   become_user: postgres
-  become: yes
+  become: true
 
 - name: Create databases
-  postgresql_db:
+  community.postgresql.postgresql_db:
     name: "{{ item.name }}"
   with_items: "{{ databases }}"
   become_user: postgres
-  become: yes
+  become: true
 
 - name: Grant privileges to users
-  postgresql_privs:
+  community.postgresql.postgresql_privs:
     roles: "{{ item.user }}"
     database: postgres
     type: "{{ item.type }}"
@@ -25,10 +25,10 @@
     privs: "{{ item.privilege }}"
   with_items: "{{ privileges }}"
   become_user: postgres
-  become: yes
+  become: true
 
 - name: Configure access
-  postgresql_pg_hba:
+  community.postgresql.postgresql_pg_hba:
     dest: "{{ postgres.conf_dir }}/pg_hba.conf"
     contype: host
     users: "{{ item.name }}"
@@ -36,15 +36,15 @@
   with_items: "{{ users }}"
 
 - name: Create replication user
-  postgresql_user:
+  community.postgresql.postgresql_user:
     name: "{{ replication.user }}"
     password: "{{ replication.password }}"
     role_attr_flags: REPLICATION,LOGIN
   become_user: postgres
-  become: yes
+  become: true
 
 - name: Configure access
-  postgresql_pg_hba:
+  community.postgresql.postgresql_pg_hba:
     dest: "{{ postgres.conf_dir }}/pg_hba.conf"
     contype: host
     databases: replication
@@ -52,6 +52,6 @@
     source: "{{ slave_ip_address }}"
 
 - name: Restart Postgres
-  systemd:
+  ansible.builtin.systemd:
     name: postgresql
     state: restarted

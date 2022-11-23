@@ -1,7 +1,7 @@
 ---
 # packages task for basic
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ basic_packages }}"
     cache_valid_time: 86400
-    update_cache: yes
+    update_cache: true

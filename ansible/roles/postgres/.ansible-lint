@@ -1,0 +1,13 @@
+---
+exclude_paths:
+  - molecule
+
+write_list:
+  - all
+
+skip_list:
+  - command-instead-of-shell
+  - risky-shell-pipe
+  - no-handler
+  - yaml[empty-lines]
+  - jinja[spacing]

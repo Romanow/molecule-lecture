@@ -1,6 +1,6 @@
 ---
 # main handlers file for basic
-- name: restart ufw
-  service:
+- name: Restart Firewall
+  ansible.builtin.service:
     name: ufw
     state: restarted

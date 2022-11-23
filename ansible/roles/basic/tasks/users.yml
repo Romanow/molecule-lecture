@@ -1,36 +1,34 @@
 ---
 # users task for basic
-- name: Create {{ developer_group }} group
-  group:
+- name: Create group {{ developer_group }}
+  ansible.builtin.group:
     name: "{{ developer_group }}"
     state: present
 
 - name: Get existing users
-  shell: 'grep developers /etc/group | cut -d: -f4 | tr "," "\n"'
+  ansible.builtin.shell: 'grep developers /etc/group | cut -d: -f4 | tr "," "\n"'
   changed_when: false
   register: existing_users
 
 - name: Existing users
-  debug:
+  ansible.builtin.debug:
     msg: "{{ existing_users.stdout_lines }}"
-  tags: [ never, debug ]
-
+  tags: [never, debug]
 - name: Calculate users
-  set_fact:
+  ansible.builtin.set_fact:
     users_for_remove: "{{ existing_users.stdout_lines | difference(user_accounts | map(attribute='name')) }}"
 
 - name: Users for remove
-  debug:
+  ansible.builtin.debug:
     msg: "{{ users_for_remove }}"
-  tags: [ never, debug ]
-
+  tags: [never, debug]
 - name: Create users
-  include_tasks: user.yml
+  ansible.builtin.include_tasks: user.yml
   with_items: "{{ user_accounts }}"
 
 - name: Delete users {{ users_for_remove }}
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     state: absent
-    remove: yes
+    remove: true
   with_items: "{{ users_for_remove }}"
