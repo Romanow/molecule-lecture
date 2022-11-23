@@ -14,7 +14,7 @@ users:
     attributes: []
 
 privileges:
-  - name: orders
+  - name: services
     type: database
-    user: program
+    user: test
     privilege: ALL
