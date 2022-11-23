@@ -6,8 +6,7 @@ driver:
   provider:
     name: virtualbox
 platforms:
-  - name: postgres-master
-    hostname: postgres-master.local
+  - name: postgres-master.local
     box: romanow/ansible-box
     box_version: 22.04
     memory: 1024
@@ -23,8 +22,7 @@ platforms:
     children:
       - postgres
 
-  - name: postgres-slave
-    hostname: postgres-slave.local
+  - name: postgres-slave.local
     box: romanow/ansible-box
     box_version: 22.04
     memory: 1024
@@ -46,10 +44,6 @@ provisioner:
     defaults:
       vault_password_file: "${MOLECULE_SCENARIO_DIRECTORY}/.vault_pass"
   inventory:
-    inventory:
-      host_vars:
-        ubuntu:
-          ansible_python_interpreter: "/usr/bin/python3"
     links:
       group_vars: ${MOLECULE_PROJECT_DIRECTORY}/../../inventories/local/group_vars/
 verifier:
