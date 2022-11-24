@@ -6,8 +6,7 @@ driver:
 platforms:
   - name: ubuntu
     image: ubuntu:22.04
-    capabilities:
-      - NET_ADMIN
+    privileged: true
 provisioner:
   name: ansible
 verifier:

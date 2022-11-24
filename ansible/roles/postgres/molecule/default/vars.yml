@@ -18,3 +18,7 @@ privileges:
     type: database
     user: test
     privilege: ALL
+
+replication:
+  user: replication
+  password: test

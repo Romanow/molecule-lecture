@@ -18,6 +18,11 @@
     group: postgres
     mode: 0644
 
+- name: Restart Postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted
+
 - name: Configure Master node
   ansible.builtin.include_tasks:
     file: master.yml

@@ -6,6 +6,8 @@ timezone = {{ postgres.timezone }}
 data_directory = '{{ postgres.data_dir }}'
 hba_file = '{{ postgres.conf_dir }}/pg_hba.conf'
 ident_file = '{{ postgres.conf_dir }}/pg_ident.conf'
+external_pid_file = '{{ postgres.run_dir }}/{{ postgres.version }}-main.pid'
+unix_socket_directories = '{{ postgres.run_dir }}'
 
 password_encryption = md5
 

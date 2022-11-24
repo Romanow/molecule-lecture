@@ -2,52 +2,52 @@
 dependency:
   name: galaxy
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: docker
 platforms:
-  - name: postgres-master.local
-    box: romanow/ansible-box
-    box_version: 22.04
-    memory: 1024
-    cpus: 1
-    instance_raw_config_args:
-      - 'ssh.username = "ansible"'
-      - 'ssh.password = "root"'
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.56.100
+  - name:  postgres-master.local
+    image: ubuntu:22.04
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    docker_networks:
+      - name: cluster
+        ipam_config:
+          - subnet: "192.168.0.0/24"
+            gateway: "192.168.0.254"
+    exposed_pors:
+      - 5432/tcp
+    networks:
+      - name: cluster
+        ipv4_address: "192.168.0.10"
     groups:
+      - postgres
       - master
-    children:
-      - postgres
 
-  - name: postgres-slave.local
-    box: romanow/ansible-box
-    box_version: 22.04
-    memory: 1024
-    cpus: 1
-    instance_raw_config_args:
-      - 'ssh.username = "ansible"'
-      - 'ssh.password = "root"'
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.56.101
+  - name:  postgres-slave.local
+    image: ubuntu:22.04
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    exposed_pors:
+      - 5432/tcp
+    networks:
+      - name: cluster
+        ipv4_address: "192.168.0.11"
     groups:
-      - slave
-    children:
       - postgres
+      - slave
 
 provisioner:
   name: ansible
+  log: true
   config_options:
     defaults:
-      vault_password_file: "${MOLECULE_SCENARIO_DIRECTORY}/.vault_pass"
       allow_world_readable_tmpfiles: true
-      remote_tmp: "~/.ansible/tmp"
   inventory:
-    links:
-      group_vars: "${MOLECULE_PROJECT_DIRECTORY}/../../inventories/local/group_vars/"
+    group_vars:
+      postgres:
+        master_ip_address: "192.168.0.10"
+        slave_ip_address: "192.168.0.11"
 verifier:
   name: ansible
 lint: |

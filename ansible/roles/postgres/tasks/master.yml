@@ -52,6 +52,6 @@
     source: "{{ slave_ip_address }}"
 
 - name: Restart Postgres
-  ansible.builtin.systemd:
+  ansible.builtin.service:
     name: postgresql
     state: restarted

@@ -18,20 +18,25 @@ jobs:
 
   ansible:
     name: Ansible
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
+      - name: Install requirements
+        run: |-
+          pip3 install -r ansible/requirements.txt
+
       - name: Test Scenarious
         run: |-
           shopt -s extglob
 
-          cd ansible
-          pip3 install -r requirements.txt
           base_folder=$(pwd)
-          for dir in roles/*; do
+          for dir in ansible/roles/*; do
             cd "$dir"
             molecule converge
             cd "$base_folder"
           done
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
 

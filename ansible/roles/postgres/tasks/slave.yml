@@ -16,6 +16,11 @@
   become: true
   when: not replication_required_file.stat.exists
   block:
+    - name: Stop Postgres
+      ansible.builtin.service:
+        name: postgresql
+        state: stopped
+
     - name: Remove database folder
       ansible.builtin.file:
         path: "{{ postgres.data_dir }}"
@@ -38,6 +43,6 @@
         creates: replication.done
 
 - name: Restart Postgres
-  ansible.builtin.systemd:
+  ansible.builtin.service:
     name: postgresql
     state: restarted
