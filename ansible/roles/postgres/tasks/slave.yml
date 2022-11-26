@@ -11,16 +11,16 @@
     path: "{{ postgres.conf_dir }}/replication.done"
   register: replication_required_file
 
+- name: Stop Postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: stopped
+
 - name: Sync database
   become_user: postgres
   become: true
   when: not replication_required_file.stat.exists
   block:
-    - name: Stop Postgres
-      ansible.builtin.service:
-        name: postgresql
-        state: stopped
-
     - name: Remove database folder
       ansible.builtin.file:
         path: "{{ postgres.data_dir }}"
@@ -28,7 +28,7 @@
 
     - name: Fetch data from master
       ansible.builtin.shell: |
-        PGPASSWORD="{{ replication.password }}" \
+        PGPASSWORD="{{ replication_user.password }}" \
         pg_basebackup \
           --write-recovery-conf \
           --format=plain \
@@ -36,7 +36,7 @@
           --verbose \
           -h "{{ master_ip_address }}" \
           -p "{{ postgres.listen_port }}" \
-          -U "{{ replication.user }}" \
+          -U "{{ replication_user.name }}" \
           -D "{{ postgres.data_dir }}" > "{{ postgres.conf_dir }}/replication.done"
       args:
         chdir: "{{ postgres.conf_dir }}"

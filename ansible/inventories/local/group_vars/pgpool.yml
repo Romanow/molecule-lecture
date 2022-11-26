@@ -1,0 +1,10 @@
+---
+# inventories file pgpool local group
+firewall:
+  enabled: true
+  rules:
+    - name: pgpool
+      port: 9999
+      policy: allow
+      direction: in
+      protocol: tcp

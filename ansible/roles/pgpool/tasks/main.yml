@@ -1,0 +1,16 @@
+---
+# main tasks file for postgres
+- name: Install PgPool II {{ pgpool.version }}
+  ansible.builtin.include_tasks:
+    file: install.yml
+    apply:
+      tags: [all, pgpool]
+  tags: [all, pgpool]
+  when: "'pgpool' not in ansible_facts.packages"
+
+- name: Configure PgPool II
+  ansible.builtin.include_tasks:
+    file: configure.yml
+    apply:
+      tags: [all, pgpool, configure]
+  tags: [all, pgpool, configure]

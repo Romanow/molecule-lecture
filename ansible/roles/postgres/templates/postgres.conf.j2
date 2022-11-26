@@ -21,6 +21,7 @@ work_mem = {{ postgres.config.work_mem }}
 default_statistics_target = {{ postgres.config.default_statistics_target }}
 random_page_cost = {{ postgres.config.random_page_cost }}
 effective_io_concurrency = {{ postgres.config.effective_io_concurrency }}
+password_encryption = 'scram-sha-256'
 
 wal_buffers = {{ postgres.replication.wal_buffers }}
 min_wal_size = {{ postgres.replication.min_wal_size }}
@@ -33,7 +34,7 @@ wal_keep_size = 128MB
 {% else %}
 hot_standby = on
 hot_standby_feedback = on
-primary_conninfo = 'host={{ master_ip_address }} port={{ postgres.listen_port }} user={{ replication.user }} password={{ replication.password }}'
+primary_conninfo = 'host={{ master_ip_address }} port={{ postgres.listen_port }} user={{ replication_user.name }} password={{ replication_user.password }}'
 promote_trigger_file = '{{ postgres.data_dir }}/replication.finish'
 {% endif %}
 

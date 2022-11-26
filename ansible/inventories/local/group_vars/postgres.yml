@@ -1,0 +1,16 @@
+---
+# inventories file postgres local group
+master_ip_address: "{{ hostvars['postgres-master.local']['ansible_host'] }}"
+database_subnet: "{{ ''.join((master_ip_address, '/16')) | ansible.utils.ipaddr('network/prefix') }}"
+
+firewall:
+  enabled: true
+  rules:
+    - name: postgres
+      port: 5432
+      policy: allow
+      direction: in
+      protocol: tcp
+
+databases:
+  - name: orders

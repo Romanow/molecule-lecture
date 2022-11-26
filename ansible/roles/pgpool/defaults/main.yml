@@ -1,0 +1,32 @@
+---
+# main defaults file for basic
+pgpool_ip_address: "{{ hostvars['pgpool.local']['ansible_host'] }}"
+database_subnet: "{{ ''.join((pgpool_ip_address, '/16')) | ansible.utils.ipaddr('network/prefix') }}"
+
+postgres:
+  version: 15
+  listen_port: 5432
+  home_dir: /var/lib/postgresql
+  data_dir: /var/lib/postgresql/15/main
+
+pgpool:
+  version: 4.2
+  listen_port: 9999
+  listen_address: "*"
+  conf_dir: /etc/pgpool2
+  run_dir: /var/run/pgpool2
+  log_dir: /var/log/pgpool2
+
+users: []
+
+replication_user:
+  name: replication
+  database: replication
+  password: "{{ vault_replication_passwd }}"
+
+pgpool_user:
+  name: pgpool
+  database: all
+  password: "{{ vault_pgpool_passwd }}"
+
+postgres_instances: "{{ groups['postgres'] | map('extract', hostvars, ['ansible_host']) | list }}"

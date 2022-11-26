@@ -35,7 +35,7 @@ platforms:
         ipv4_address: "192.168.0.11"
     groups:
       - postgres
-      - slave
+      - slaves
 
 provisioner:
   name: ansible
@@ -47,7 +47,6 @@ provisioner:
     group_vars:
       postgres:
         master_ip_address: "192.168.0.10"
-        slave_ip_address: "192.168.0.11"
 verifier:
   name: ansible
 lint: |

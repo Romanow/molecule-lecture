@@ -23,6 +23,12 @@
     name: postgresql
     state: restarted
 
+- name: Configure access
+  ansible.builtin.include_tasks:
+    file: access.yml
+    apply:
+      tags: [all, postgres, configure]
+
 - name: Configure Master node
   ansible.builtin.include_tasks:
     file: master.yml
@@ -30,9 +36,9 @@
       tags: [all, postgres, configure]
   when: "'master' in group_names"
 
-- name: Configure Slave node
+- name: Configure Slaves node
   ansible.builtin.include_tasks:
     file: slave.yml
     apply:
       tags: [all, postgres, configure]
-  when: "'slave' in group_names"
+  when: "'slaves' in group_names"

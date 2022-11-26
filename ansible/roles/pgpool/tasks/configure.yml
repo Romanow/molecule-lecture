@@ -1,0 +1,63 @@
+---
+# configure task for pgpool
+- name: Create folders
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: postgres
+    group: postgres
+    mode: 0744
+    state: directory
+  with_items:
+    - "{{ pgpool.log_dir }}"
+    - "{{ pgpool.run_dir }}"
+
+- name: Configure PgPool II
+  ansible.builtin.template:
+    src: templates/pgpool.conf.j2
+    dest: "{{ pgpool.conf_dir }}/pgpool.conf"
+    owner: root
+    group: postgres
+    mode: 0640
+
+- name: Configure failover.sh
+  ansible.builtin.template:
+    src: templates/failover.sh.j2
+    dest: "{{ pgpool.conf_dir }}/failover.sh"
+    owner: postgres
+    group: postgres
+    mode: 0640
+
+- name: Configure access
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ pgpool.conf_dir }}/pool_hba.conf"
+    contype: host
+    method: scram-sha-256
+    databases: "{{ item.database }}"
+    users: "{{ item.name }}"
+    source: 0.0.0.0/0
+  with_items:
+    - "{{ users }}"
+    - "{{ replication_user }}"
+    - "{{ pgpool_user }}"
+
+- name: Configure AES key
+  ansible.builtin.copy:
+    dest: "{{ postgres.home_dir }}/.pgpoolkey"
+    content: 'test'
+    owner: postgres
+    group: postgres
+    mode: 0600
+  become_user: postgres
+  become: yes
+
+- name: Configure passwords
+  shell: 'pg_enc -m -k {{ postgres.home_dir }}/.pgpoolkey -u {{ item.name }} {{ item.password }}'
+  with_items:
+    - "{{ replication_user }}"
+    - "{{ pgpool_user }}"
+    - "{{ users }}"
+
+- name: Restart PgPool II
+  ansible.builtin.service:
+    name: pgpool2
+    state: restarted

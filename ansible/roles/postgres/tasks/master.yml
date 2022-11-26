@@ -5,6 +5,8 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.attributes | join(',') }}"
+  environment:
+    PGOPTIONS: "-c password_encryption=scram-sha-256"
   with_items: "{{ users }}"
   become_user: postgres
   become: true
@@ -12,46 +14,37 @@
 - name: Create databases
   community.postgresql.postgresql_db:
     name: "{{ item.name }}"
+
   with_items: "{{ databases }}"
   become_user: postgres
   become: true
 
 - name: Grant privileges to users
   community.postgresql.postgresql_privs:
-    roles: "{{ item.user }}"
-    database: postgres
-    type: "{{ item.type }}"
-    objs: "{{ item.name }}"
+    role: "{{ item.name }}"
+    database: "{{ item.database }}"
     privs: "{{ item.privilege }}"
-  with_items: "{{ privileges }}"
+    type: database
+  with_items: "{{ users }}"
   become_user: postgres
   become: true
-
-- name: Configure access
-  community.postgresql.postgresql_pg_hba:
-    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
-    contype: host
-    users: "{{ item.name }}"
-    source: 0.0.0.0/0
-  with_items: "{{ users }}"
 
 - name: Create replication user
   community.postgresql.postgresql_user:
-    name: "{{ replication.user }}"
-    password: "{{ replication.password }}"
+    name: "{{ replication_user.name }}"
+    password: "{{ replication_user.password }}"
     role_attr_flags: REPLICATION,LOGIN
+  environment:
+    PGOPTIONS: "-c password_encryption=scram-sha-256"
   become_user: postgres
   become: true
 
-- name: Configure access
-  community.postgresql.postgresql_pg_hba:
-    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
-    contype: host
-    databases: replication
-    users: "{{ replication.user }}"
-    source: "{{ slave_ip_address }}"
-
-- name: Restart Postgres
-  ansible.builtin.service:
-    name: postgresql
-    state: restarted
+- name: Create PgPool user
+  community.postgresql.postgresql_user:
+    name: "{{ pgpool_user.name }}"
+    password: "{{ pgpool_user.password }}"
+    role_attr_flags: SUPERUSER
+  environment:
+    PGOPTIONS: "-c password_encryption=scram-sha-256"
+  become_user: postgres
+  become: true

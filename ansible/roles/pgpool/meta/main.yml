@@ -1,0 +1,13 @@
+---
+# meta file for postgres
+galaxy_info:
+  role_name: pgpool
+  namespace: romanowalex
+  author: Romanov Alex (romanowalex@mail.ru)
+  description: Install and configure PgPool II
+  license: Apache-2.0
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Ubuntu
+dependencies:
+  - name: basic

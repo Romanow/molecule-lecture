@@ -1,0 +1,115 @@
+#------------------------------------------------------------------------------
+# COMMON SETTINGS
+#------------------------------------------------------------------------------
+
+backend_clustering_mode = 'streaming_replication'
+
+listen_addresses = {{ pgpool.listen_address }}
+port = {{ pgpool.listen_port }}
+
+pid_file_name = '{{ pgpool.run_dir }}/pgpool.pid'
+ssl = off
+
+#------------------------------------------------------------------------------
+# BACKENDS
+#------------------------------------------------------------------------------
+
+{% for instance in postgres_instances %}
+backend_hostname{{ loop.index0 }} = '{{ instance }}'
+backend_port{{ loop.index0 }} = {{ postgres.listen_port }}
+backend_weight{{ loop.index0 }} = 1
+backend_data_directory{{ loop.index0 }} = '{{ postgres.data_dir }}'
+backend_flag{{ loop.index0 }} = 'ALLOW_TO_FAILOVER'
+backend_application_name{{ loop.index0 }} = 'server{{ loop.index }}'
+{% endfor %}
+
+#------------------------------------------------------------------------------
+# FAILOVER
+#------------------------------------------------------------------------------
+
+# Executes this command at failover
+# Special values:
+#   %d = failed node id
+#   %h = failed node host name
+#   %p = failed node port number
+#   %D = failed node database cluster path
+#   %m = new main node id
+#   %H = new main node hostname
+#   %M = old main node id
+#   %P = old primary node id
+#   %r = new main port number
+#   %R = new main database cluster path
+#   %N = old primary node hostname
+#   %S = old primary node port number
+#   %% = '%' character
+failover_command = '{{ pgpool.conf_dir }}/failover.sh %d %h %p %D %m %H %M %P %r %R %N %S'
+
+# Initiates failover when reading/writing to the backend communication socket fails. If set to off,
+# pgpool will report an error and disconnect the session.
+failover_on_backend_error = on
+
+# Initiates failover when backend is shutdown, or backend process is killed.
+# If set to off, pgpool will report an error and disconnect the session.
+failover_on_backend_shutdown = on
+
+#------------------------------------------------------------------------------
+# AUTHENTICATION
+#------------------------------------------------------------------------------
+
+# Use pool_hba.conf for client authentication
+enable_pool_hba = on
+pool_passwd = 'pool_passwd'
+
+#------------------------------------------------------------------------------
+# POOLS
+#------------------------------------------------------------------------------
+
+# Number of reserved connections. Pgpool-II does not accept connections if over num_init_children - reserved_connections.
+reserved_connections = 5
+
+# Number of concurrent sessions allowed
+num_init_children = 45
+
+#------------------------------------------------------------------------------
+# STREAMING REPLICATION MODE
+#------------------------------------------------------------------------------
+
+sr_check_period = 10
+
+sr_check_user = 'pgpool'
+sr_check_database = 'postgres'
+
+#------------------------------------------------------------------------------
+# HEALTH CHECK GLOBAL PARAMETERS
+#------------------------------------------------------------------------------
+
+health_check_period = 10
+health_check_timeout = 20
+
+health_check_user = 'pgpool'
+health_check_database = 'postgres'
+# Maximum number of times to retry a failed health check before giving up.
+health_check_max_retries = 5
+# Amount of time to wait (in seconds) between retries.
+health_check_retry_delay = 5
+
+#------------------------------------------------------------------------------
+# LOGS
+#------------------------------------------------------------------------------
+
+logging_collector = on
+log_line_prefix = '%t [pid %p]: '
+logdir = '{{ pgpool.log_dir }}'
+log_directory = '{{ pgpool.log_dir }}'
+
+log_min_messages = info
+log_error_verbosity = verbose
+log_filename = 'pgpool-%Y-%m-%d_%H%M.log'
+log_file_mode = 0644
+
+# If on, an existing log file with the same name as the new log file will be truncated rather than appended to.
+# But such truncation only occurs on time-driven rotation, not on restarts or size-driven rotation. Default is
+# off, meaning append to existing files in all cases.
+log_truncate_on_rotation = off
+log_rotation_age = 1d
+log_rotation_size = 10MB

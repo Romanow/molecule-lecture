@@ -1,0 +1,20 @@
+---
+# install task for pgpool
+- name: Add Postrges key
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add Postgres repository
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main
+    update_cache: true
+    state: present
+
+- name: Install PgPool II
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "pgpool2"
+    - "postgresql-{{ postgres.version }}-pgpool2"

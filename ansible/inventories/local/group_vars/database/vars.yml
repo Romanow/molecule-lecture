@@ -1,0 +1,19 @@
+---
+# inventories file database local group
+users:
+  - name: program
+    database: orders
+    password: "{{ vault_program_passwd }}"
+    privilege: ALL
+    attributes:
+      - LOGIN
+
+replication_user:
+  name: replication
+  database: replication
+  password: "{{ vault_replication_passwd }}"
+
+pgpool_user:
+  name: pgpool
+  database: all
+  password: "{{ vault_pgpool_passwd }}"
