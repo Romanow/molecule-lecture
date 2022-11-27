@@ -34,6 +34,7 @@ jobs:
           for dir in ansible/roles/*; do
             cd "$dir"
             molecule converge
+            molecule destroy
             cd "$base_folder"
           done
         env:
