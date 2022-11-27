@@ -1,5 +1,9 @@
 ---
 # inventories file pgpool local group
+pgpool_ip_address: "{{ hostvars['pgpool.local']['ansible_host'] }}"
+database_subnet: "{{ ''.join((pgpool_ip_address, '/16')) | ansible.utils.ipaddr('network/prefix') }}"
+postgres_instances: "{{ groups['postgres'] | map('extract', hostvars, ['ansible_host']) | list }}"
+
 firewall:
   enabled: true
   rules:
