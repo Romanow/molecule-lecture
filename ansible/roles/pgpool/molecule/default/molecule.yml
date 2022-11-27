@@ -5,7 +5,8 @@ driver:
   name: docker
 platforms:
   - name: postgres-master.local
-    image: "${MOLECULE_IMAGE:-ubuntu}:${MOLECULE_VERSION:-22.04}"
+    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    pre_build_image: true
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -25,7 +26,8 @@ platforms:
       - master
 
   - name: postgres-slave.local
-    image: "${MOLECULE_IMAGE:-ubuntu}:${MOLECULE_VERSION:-22.04}"
+    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    pre_build_image: true
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -40,7 +42,8 @@ platforms:
       - slaves
 
   - name: pgpool.local
-    image: "${MOLECULE_IMAGE:-ubuntu}:${MOLECULE_VERSION:-22.04}"
+    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    pre_build_image: true
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro

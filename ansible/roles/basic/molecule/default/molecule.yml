@@ -5,14 +5,9 @@ driver:
   name: docker
 platforms:
   - name: ubuntu
-    image: ubuntu:22.04
+    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    pre_build_image: true
     privileged: true
-    build-args:
-      MOLECULE_IMAGE: "${MOLECULE_IMAGE}"
-      MOLECULE_VERSION: "${MOLECULE_VERSION}"
-    env:
-      MOLECULE_IMAGE: "${MOLECULE_IMAGE}"
-      MOLECULE_VERSION: "${MOLECULE_VERSION}"
 provisioner:
   name: ansible
   log: true

@@ -22,8 +22,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu ]
-        versions: [ 20.04, 20.10, 22.04, 22.10 ]
+        os:
+          - ubuntu1804
+          - ubuntu2004
+          - ubuntu2204
     steps:
       - uses: actions/checkout@v3
       - name: Install requirements
@@ -33,7 +35,6 @@ jobs:
         run: |-
           shopt -s extglob
 
-          echo ${MOLECULE_IMAGE}:${MOLECULE_VERSION}
           base_folder=$(pwd)
           for dir in ansible/roles/*; do
             cd "$dir"
@@ -44,7 +45,6 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_IMAGE: ${{ matrix.os }}
-          MOLECULE_VERSION: ${{ matrix.version }}
 
   ansible-playbook:
     name: Ansible Playbook tests
