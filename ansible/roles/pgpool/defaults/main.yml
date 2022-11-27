@@ -2,6 +2,7 @@
 # main defaults file for basic
 pgpool_ip_address: "{{ hostvars['pgpool.local']['ansible_host'] }}"
 database_subnet: "{{ ''.join((pgpool_ip_address, '/16')) | ansible.utils.ipaddr('network/prefix') }}"
+postgres_instances: "{{ groups['postgres'] | map('extract', hostvars, ['ansible_host']) | list }}"
 
 postgres:
   version: 15
@@ -28,5 +29,3 @@ pgpool_user:
   name: pgpool
   database: all
   password: "{{ vault_pgpool_passwd }}"
-
-postgres_instances: "{{ groups['postgres'] | map('extract', hostvars, ['ansible_host']) | list }}"

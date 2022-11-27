@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name:  postgres-master.local
+  - name: postgres-master.local
     image: ubuntu:22.04
     privileged: true
     volumes:
@@ -12,19 +12,19 @@ platforms:
     docker_networks:
       - name: cluster
         ipam_config:
-          - subnet: "192.168.0.0/24"
-            gateway: "192.168.0.254"
+          - subnet: "192.168.1.0/24"
+            gateway: "192.168.1.254"
     exposed_pors:
       - 5432/tcp
     networks:
       - name: cluster
-        ipv4_address: "192.168.0.10"
+        ipv4_address: "192.168.1.10"
     groups:
       - database
       - postgres
       - master
 
-  - name:  postgres-slave.local
+  - name: postgres-slave.local
     image: ubuntu:22.04
     privileged: true
     volumes:
@@ -33,11 +33,25 @@ platforms:
       - 5432/tcp
     networks:
       - name: cluster
-        ipv4_address: "192.168.0.11"
+        ipv4_address: "192.168.1.11"
     groups:
       - database
       - postgres
       - slaves
+
+  - name: pgpool.local
+    image: ubuntu:22.04
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    exposed_pors:
+      - 5432/tcp
+    networks:
+      - name: cluster
+        ipv4_address: "192.168.1.12"
+    groups:
+      - database
+      - pgpool
 
 provisioner:
   name: ansible
@@ -47,9 +61,11 @@ provisioner:
       allow_world_readable_tmpfiles: true
   inventory:
     group_vars:
-      postgres:
-        master_ip_address: "192.168.0.10"
-        database_subnet: "192.168.0.0/24"
+      database:
+        master_ip_address: "192.168.1.10"
+        database_subnet: "192.168.1.0/24"
+        pgpool_ip_address: "192.168.1.12"
+        postgres_instances: [ "192.168.1.10", "192.168.1.11" ]
 verifier:
   name: ansible
 lint: |

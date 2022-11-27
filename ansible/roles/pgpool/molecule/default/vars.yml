@@ -5,15 +5,9 @@ firewall:
   enabled: false
   rules: [ ]
 
-databases:
-  - name: services
+databases: []
 
-users:
-  - name: test
-    password: test
-    database: services
-    privilege: ALL
-    attributes: []
+users: []
 
 replication_user:
   name: replication
