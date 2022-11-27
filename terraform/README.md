@@ -1,4 +1,4 @@
-# Terraform scripts to create AWS EKS cluster
+# Terraform scripts to create VMs in DigitalOcean cloud provider
 
 ## Подготовка
 
