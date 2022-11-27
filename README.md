@@ -1,5 +1,7 @@
 # Человек-Molecule или как тестировать инфраструктуру
 
+[![build](https://github.com/Romanow/molecule-lecture/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/Romanow/molecule-lecture/actions/workflows/build.yml)
+
 ## Аннотация
 
 Все знают, что в разработке тесты важны и полезны. Но ведь у нас есть еще инфраструктура, как с ней быть? Там тоже есть

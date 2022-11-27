@@ -27,13 +27,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install requirements
-        run: |-
-          pip3 install -r ansible/requirements.txt
+        run: pip3 install -r ansible/requirements.txt
 
       - name: Test Roles
         run: |-
           shopt -s extglob
 
+          echo ${MOLECULE_IMAGE}:${MOLECULE_VERSION}
           base_folder=$(pwd)
           for dir in ansible/roles/*; do
             cd "$dir"
@@ -52,8 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install requirements
-        run: |-
-          pip3 install -r ansible/requirements.txt
+        run: pip3 install -r ansible/requirements.txt
 
       - name: Test Playbooks
         run: |-

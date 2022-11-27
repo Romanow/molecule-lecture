@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: ubuntu
-    image: ${MOLECULE_IMAGE:-ubuntu}:${MOLECULE_VERSION:-22.04}
+    image: "${MOLECULE_IMAGE:-ubuntu}:${MOLECULE_VERSION:-22.04}"
     privileged: true
 provisioner:
   name: ansible

@@ -1,13 +1,15 @@
 ---
 exclude_paths:
+  - .github
   - molecule
+  - inventories
+  - roles
 
 write_list:
   - all
 
 skip_list:
   - command-instead-of-shell
-  - no-changed-when
   - risky-shell-pipe
   - no-handler
   - yaml[empty-lines]
