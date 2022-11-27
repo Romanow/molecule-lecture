@@ -5,8 +5,7 @@ driver:
   name: docker
 platforms:
   - name: ubuntu
-    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
-    pre_build_image: true
+    image: ubuntu:22.04
     privileged: true
 provisioner:
   name: ansible

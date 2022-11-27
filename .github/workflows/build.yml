@@ -19,13 +19,6 @@ jobs:
   ansible-roles:
     name: Ansible Role tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu1804
-          - ubuntu2004
-          - ubuntu2204
     steps:
       - uses: actions/checkout@v3
       - name: Install requirements
@@ -44,7 +37,6 @@ jobs:
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_IMAGE: ${{ matrix.os }}
 
   ansible-playbook:
     name: Ansible Playbook tests

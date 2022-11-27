@@ -8,7 +8,7 @@ driver:
 platforms:
   - name: postgres-master.local
     box: "romanow/ansible-box"
-    box_version: "v22.04"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:
@@ -24,7 +24,7 @@ platforms:
 
   - name: postgres-slave.local
     box: "romanow/ansible-box"
-    box_version: "v22.04"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:
@@ -40,7 +40,7 @@ platforms:
 
   - name: pgpool.local
     box: "romanow/ansible-box"
-    box_version: "v22.04"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:

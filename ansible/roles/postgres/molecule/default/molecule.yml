@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: postgres-master.local
-    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    image: ubuntu:22.04
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -25,7 +25,7 @@ platforms:
       - master
 
   - name: postgres-slave.local
-    image: "geerlingguy/docker-${MOLECULE_IMAGE:-ubuntu2204}-ansible:latest"
+    image: ubuntu:22.04
     privileged: true
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
