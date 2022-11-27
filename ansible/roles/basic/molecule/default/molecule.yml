@@ -5,8 +5,6 @@ driver:
   name: docker
 platforms:
   - name: ubuntu
-    image: "${MOLECULE_IMAGE:-ubuntu}"
-    version: "${MOLECULE_VERSION:-22.04}"
     privileged: true
     env:
       MOLECULE_IMAGE: "${MOLECULE_IMAGE}"

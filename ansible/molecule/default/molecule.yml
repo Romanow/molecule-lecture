@@ -7,8 +7,8 @@ driver:
     name: virtualbox
 platforms:
   - name: postgres-master.local
-    box: romanow/ansible-box
-    box_version: 22.04
+    box: "romanow/ansible-box"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:
@@ -23,8 +23,8 @@ platforms:
       - master
 
   - name: postgres-slave.local
-    box: romanow/ansible-box
-    box_version: 22.04
+    box: "romanow/ansible-box"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:
@@ -39,8 +39,8 @@ platforms:
       - slaves
 
   - name: pgpool.local
-    box: romanow/ansible-box
-    box_version: 22.04
+    box: "romanow/ansible-box"
+    box_version: "22.04"
     memory: 1024
     cpus: 1
     instance_raw_config_args:
