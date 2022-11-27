@@ -16,34 +16,34 @@ jobs:
           terraform init
           terraform validate
 
-    ansible-roles:
-      name: Ansible Role tests
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          os: ubuntu
-          versions: [ 20.04, 20.10, 22.04, 22.10 ]
-      steps:
-        - uses: actions/checkout@v3
-        - name: Install requirements
-          run: |-
-            pip3 install -r ansible/requirements.txt
+  ansible-roles:
+    name: Ansible Role tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: ubuntu
+        versions: [ 20.04, 20.10, 22.04, 22.10 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install requirements
+        run: |-
+          pip3 install -r ansible/requirements.txt
 
-        - name: Test Roles
-          run: |-
-            shopt -s extglob
+      - name: Test Roles
+        run: |-
+          shopt -s extglob
 
-            base_folder=$(pwd)
-            for dir in ansible/roles/*; do
-              cd "$dir"
-              molecule test
-              cd "$base_folder"
-            done
-          env:
-            PY_COLORS: '1'
-            ANSIBLE_FORCE_COLOR: '1'
-            MOLECULE_IMAGE: ${{ matrix.os }}
-            MOLECULE_VERSION: ${{ matrix.version }}
+          base_folder=$(pwd)
+          for dir in ansible/roles/*; do
+            cd "$dir"
+            molecule test
+            cd "$base_folder"
+          done
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_IMAGE: ${{ matrix.os }}
+          MOLECULE_VERSION: ${{ matrix.version }}
 
   ansible-playbook:
     name: Ansible Playbook tests
