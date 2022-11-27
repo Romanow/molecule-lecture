@@ -5,6 +5,7 @@ driver:
   name: docker
 platforms:
   - name: ubuntu
+    image: ubuntu:22.04
     privileged: true
     env:
       MOLECULE_IMAGE: "${MOLECULE_IMAGE}"
