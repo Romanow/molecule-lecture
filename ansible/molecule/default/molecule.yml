@@ -60,7 +60,7 @@ provisioner:
     defaults:
       vault_password_file: "${MOLECULE_SCENARIO_DIRECTORY}/.vault_pass"
       allow_world_readable_tmpfiles: true
-      host_key_checking = false
+      host_key_checking: false
   inventory:
     links:
       group_vars: "${MOLECULE_PROJECT_DIRECTORY}/inventories/local/group_vars/"
