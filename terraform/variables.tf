@@ -3,12 +3,6 @@ variable "do_token" {
   description = "DigitalOcean access token"
 }
 
-variable "vm_tags" {
-  type        = list(string)
-  default     = ["ansible", "postgres"]
-  description = "VM tags"
-}
-
 variable "vm_size" {
   type        = string
   default     = "s-1vcpu-2gb"

@@ -6,6 +6,10 @@ data "digitalocean_ssh_key" "main" {
   name = "[work-pc] Romanow"
 }
 
+locals {
+  group = ["master", "slave", "pgpool"]
+}
+
 resource "digitalocean_droplet" "vm" {
   count    = 3
   image    = data.digitalocean_image.ubuntu.id
@@ -13,7 +17,12 @@ resource "digitalocean_droplet" "vm" {
   region   = var.vm_region
   size     = var.vm_size
   ssh_keys = [data.digitalocean_ssh_key.main.fingerprint]
-  tags     = concat(var.vm_tags, [var.names[count.index]])
+  tags = [
+    "ansible",
+    "database",
+    (contains(["master", "slave"], local.group[count.index]) ? "postgres" : ""),
+    local.group[count.index]
+  ]
 }
 
 resource "digitalocean_record" "vm-a-record" {

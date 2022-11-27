@@ -43,15 +43,15 @@
 - name: Configure AES key
   ansible.builtin.copy:
     dest: "{{ postgres.home_dir }}/.pgpoolkey"
-    content: 'test'
+    content: test
     owner: postgres
     group: postgres
     mode: 0600
   become_user: postgres
-  become: yes
+  become: true
 
 - name: Configure passwords
-  shell: 'pg_enc -m -k {{ postgres.home_dir }}/.pgpoolkey -u {{ item.name }} {{ item.password }}'
+  ansible.builtin.shell: pg_enc -m -k {{ postgres.home_dir }}/.pgpoolkey -u {{ item.name }} {{ item.password }}
   with_items:
     - "{{ replication_user }}"
     - "{{ pgpool_user }}"

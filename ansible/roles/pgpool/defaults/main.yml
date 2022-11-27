@@ -19,7 +19,6 @@ pgpool:
   log_dir: /var/log/pgpool2
 
 users: []
-
 replication_user:
   name: replication
   database: replication

@@ -7,6 +7,7 @@ write_list:
 
 skip_list:
   - command-instead-of-shell
+  - no-changed-when
   - risky-shell-pipe
   - no-handler
   - yaml[empty-lines]

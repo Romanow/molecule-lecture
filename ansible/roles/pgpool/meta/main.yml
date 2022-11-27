@@ -11,4 +11,3 @@ galaxy_info:
     - name: Ubuntu
 dependencies:
   - name: basic
-

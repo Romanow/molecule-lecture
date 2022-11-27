@@ -16,5 +16,5 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - "pgpool2"
-    - "postgresql-{{ postgres.version }}-pgpool2"
+    - pgpool2
+    - postgresql-{{ postgres.version }}-pgpool2
