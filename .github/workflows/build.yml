@@ -20,6 +20,7 @@ jobs:
     name: Ansible Role tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu ]
         versions: [ 20.04, 20.10, 22.04, 22.10 ]

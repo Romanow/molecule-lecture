@@ -9,6 +9,7 @@ platforms:
     privileged: true
 provisioner:
   name: ansible
+  log: true
 verifier:
   name: ansible
 lint: |-
