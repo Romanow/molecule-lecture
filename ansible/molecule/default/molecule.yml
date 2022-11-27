@@ -14,7 +14,6 @@ platforms:
     instance_raw_config_args:
       - 'ssh.username = "ansible"'
       - 'ssh.password = "root"'
-      - 'vm.boot_timeout = 600'
     interfaces:
       - network_name: private_network
         ip: 192.168.56.200
@@ -31,7 +30,6 @@ platforms:
     instance_raw_config_args:
       - 'ssh.username = "ansible"'
       - 'ssh.password = "root"'
-      - 'vm.boot_timeout = 600'
     interfaces:
       - network_name: private_network
         ip: 192.168.56.201
@@ -48,7 +46,6 @@ platforms:
     instance_raw_config_args:
       - 'ssh.username = "ansible"'
       - 'ssh.password = "root"'
-      - 'vm.boot_timeout = 600'
     interfaces:
       - network_name: private_network
         ip: 192.168.56.202

@@ -46,6 +46,14 @@ jobs:
       - name: Install requirements
         run: pip3 install -r ansible/requirements.txt
 
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
+
       - name: Test Playbooks
         run: |-
           cd ansible
