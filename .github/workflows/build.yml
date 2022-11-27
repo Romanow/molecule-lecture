@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distribution: ubuntu
+        os: [ ubuntu ]
         versions: [ 20.04, 20.10, 22.04, 22.10 ]
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +42,7 @@ jobs:
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_IMAGE: ${{ matrix.distribution }}
+          MOLECULE_IMAGE: ${{ matrix.os }}
           MOLECULE_VERSION: ${{ matrix.version }}
 
   ansible-playbook:
