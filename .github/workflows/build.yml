@@ -46,6 +46,9 @@ jobs:
       - name: Install requirements
         run: pip3 install -r ansible/requirements.txt
 
+      - name: Install requirements
+        run: brew install sshpass
+
       - name: Fetch Vagrant boxes
         run: vagrant box add romanow/ansible-box --box-version 22.04
 
