@@ -8,7 +8,6 @@ listen_addresses = {{ pgpool.listen_address }}
 port = {{ pgpool.listen_port }}
 
 pid_file_name = '{{ pgpool.run_dir }}/pgpool.pid'
-ssl = off
 
 #------------------------------------------------------------------------------
 # BACKENDS
@@ -57,6 +56,7 @@ failover_on_backend_shutdown = on
 #------------------------------------------------------------------------------
 
 # Use pool_hba.conf for client authentication
+# https://www.pgpool.net/docs/42/en/html/auth-pool-hba-conf.html
 enable_pool_hba = on
 pool_passwd = 'pool_passwd'
 

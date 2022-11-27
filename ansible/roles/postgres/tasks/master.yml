@@ -24,7 +24,8 @@
     role: "{{ item.name }}"
     database: "{{ item.database }}"
     privs: "{{ item.privilege }}"
-    type: database
+    type: schema
+    objs: public
   with_items: "{{ users }}"
   become_user: postgres
   become: true

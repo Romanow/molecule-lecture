@@ -9,7 +9,7 @@ ident_file = '{{ postgres.conf_dir }}/pg_ident.conf'
 external_pid_file = '{{ postgres.run_dir }}/{{ postgres.version }}-main.pid'
 unix_socket_directories = '{{ postgres.run_dir }}'
 
-password_encryption = md5
+password_encryption = 'scram-sha-256'
 
 max_connections = {{ postgres.max_connections }}
 
@@ -21,7 +21,6 @@ work_mem = {{ postgres.config.work_mem }}
 default_statistics_target = {{ postgres.config.default_statistics_target }}
 random_page_cost = {{ postgres.config.random_page_cost }}
 effective_io_concurrency = {{ postgres.config.effective_io_concurrency }}
-password_encryption = 'scram-sha-256'
 
 wal_buffers = {{ postgres.replication.wal_buffers }}
 min_wal_size = {{ postgres.replication.min_wal_size }}

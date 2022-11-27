@@ -61,3 +61,20 @@
   ansible.builtin.service:
     name: pgpool2
     state: restarted
+
+#[all servers]# mkdir ~/.ssh
+#[all servers]# chmod 700 ~/.ssh
+#[all servers]# cd ~/.ssh
+#[all servers]# ssh-keygen -t rsa -f id_rsa_pgpool
+#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server1
+#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server2
+#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server3
+#
+#[all servers]# su - postgres
+#[all servers]$ mkdir ~/.ssh
+#[all servers]$ chmod 700 ~/.ssh
+#[all servers]$ cd ~/.ssh
+#[all servers]$ ssh-keygen -t rsa -f id_rsa_pgpool
+#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server1
+#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server2
+#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server3
