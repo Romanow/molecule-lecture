@@ -19,6 +19,10 @@ jobs:
   #  ansible-roles:
   #    name: Ansible Role tests
   #    runs-on: ubuntu-latest
+  #    strategy:
+  #      matrix:
+  #        os: ubuntu
+  #        versions: [20.04, 20.10, 22.04, 22.10]
   #    steps:
   #      - uses: actions/checkout@v3
   #      - name: Install requirements
@@ -38,6 +42,8 @@ jobs:
   #        env:
   #          PY_COLORS: '1'
   #          ANSIBLE_FORCE_COLOR: '1'
+  #          MOLECULE_IMAGE: ${{ matrix.os }}
+  #          MOLECULE_VERSION: ${{ matrix.version }}
 
   ansible-playbook:
     name: Ansible Playbook tests
@@ -49,7 +55,8 @@ jobs:
           pip3 install -r ansible/requirements.txt
 
       - name: Test Playbooks
-        uses: gofrolist/molecule-action@v2
+        run: |-
+          molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
