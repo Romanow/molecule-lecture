@@ -7,6 +7,9 @@ platforms:
   - name: ubuntu
     image: ubuntu:22.04
     privileged: true
+    build-args:
+      MOLECULE_IMAGE: "${MOLECULE_IMAGE}"
+      MOLECULE_VERSION: "${MOLECULE_VERSION}"
     env:
       MOLECULE_IMAGE: "${MOLECULE_IMAGE}"
       MOLECULE_VERSION: "${MOLECULE_VERSION}"
