@@ -33,8 +33,7 @@ jobs:
           base_folder=$(pwd)
           for dir in ansible/roles/*; do
             cd "$dir"
-            molecule converge
-            molecule destroy
+            molecule test
             cd "$base_folder"
           done
         env:

@@ -71,3 +71,14 @@ verifier:
 lint: |
   yamllint .
   ansible-lint
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - syntax
+    - create
+    - prepare
+    - converge
+    - verify
+    - cleanup
+    - destroy
