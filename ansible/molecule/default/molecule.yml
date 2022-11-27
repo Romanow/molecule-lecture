@@ -74,7 +74,6 @@ scenario:
     - lint
     - syntax
     - create
-    - prepare
     - converge
     - verify
     - cleanup
