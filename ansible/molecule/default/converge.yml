@@ -1,0 +1,10 @@
+---
+- hosts: postgres
+  become: yes
+  roles:
+    - role: roles/postgres
+
+- hosts: pgpool
+  become: yes
+  roles:
+    - role: roles/pgpool

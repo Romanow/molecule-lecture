@@ -34,9 +34,7 @@ postgres:
     max_wal_size: 4GB
 
 databases: []
-
 users: []
-
 replication_user:
   name: replication
   database: replication

@@ -1,6 +1,5 @@
 ---
 basic_packages: []
-
 user_accounts:
   - name: ronin
     comment: Test User

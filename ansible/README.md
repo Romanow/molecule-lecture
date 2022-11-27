@@ -15,14 +15,26 @@ $ ansible-playbook -i inventories/local/hosts.yml --list-hosts --list-tasks post
 $ ansible-playbook -i inventories/local/hosts.yml --vault-password-file=.vault_pass postgres.yml 
 ```
 
+Для запуска на DigitalOcean, с нужно помощью Dynamic
+Inventory [digital_ocean.py](inventories/digitalocean/digital_ocean.py)
+получить список VM, для этого нужен `DO_API_TOKEN`:
+
+```shell
+$ export DO_API_TOKEN=<DigitalOcean API token>
+
+$ ansible-playbook -i inventories/digitalocean/digital_ocean.py --vault-password-file=.vault_pass postgres.yml
+```
+
+Получить DigitalOcean Access Token: `Control Panel` -> `API` -> `Generate New Token`.
+
 Проверка работоспособности:
 
 ```shell
-# на master
+# на postgres-master
 $ sudo -u postgres psql
 $ psql: SELECT client_addr, state FROM pg_stat_replication;
 
-# на slave
+# на postgres-slave
 $ sudo -u postgres psql
 $ psql: SELECT now() - pg_last_xact_replay_timestamp();
 ```

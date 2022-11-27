@@ -11,6 +11,6 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
-lint: |
+lint: |-
   yamllint .
   ansible-lint

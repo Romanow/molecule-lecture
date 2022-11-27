@@ -1,7 +1,7 @@
 ---
 - name: Converge
   hosts: all
-  become: yes
+  become: true
   tasks:
     - name: Load variables
       ansible.builtin.include_vars:
@@ -9,10 +9,10 @@
 
     - name: Install Postgres
       ansible.builtin.include_role:
-        name: "postgres"
+        name: postgres
       when: "'postgres' in group_names"
 
     - name: Install PgPool II
       ansible.builtin.include_role:
-        name: "postgres"
+        name: postgres
       when: "'pgpool' in group_names"

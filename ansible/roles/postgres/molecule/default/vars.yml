@@ -4,7 +4,6 @@ user_accounts: [ ]
 firewall:
   enabled: false
   rules: [ ]
-
 databases:
   - name: services
 

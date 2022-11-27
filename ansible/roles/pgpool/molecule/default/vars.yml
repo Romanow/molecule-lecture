@@ -4,11 +4,8 @@ user_accounts: [ ]
 firewall:
   enabled: false
   rules: [ ]
-
-databases: []
-
-users: []
-
+databases: [ ]
+users: [ ]
 replication_user:
   name: replication
   database: replication

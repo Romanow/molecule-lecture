@@ -7,7 +7,11 @@ data "digitalocean_ssh_key" "main" {
 }
 
 locals {
-  group = ["master", "slave", "pgpool"]
+  tags = [
+    ["postgres", "master"],
+    ["postgres", "slave"],
+    ["pgpool"]
+  ]
 }
 
 resource "digitalocean_droplet" "vm" {
@@ -17,12 +21,7 @@ resource "digitalocean_droplet" "vm" {
   region   = var.vm_region
   size     = var.vm_size
   ssh_keys = [data.digitalocean_ssh_key.main.fingerprint]
-  tags = [
-    "ansible",
-    "database",
-    (contains(["master", "slave"], local.group[count.index]) ? "postgres" : ""),
-    local.group[count.index]
-  ]
+  tags     = concat(local.tags[count.index], ["ansible", "database"])
 }
 
 resource "digitalocean_record" "vm-a-record" {

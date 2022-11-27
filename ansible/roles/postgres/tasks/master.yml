@@ -6,7 +6,7 @@
     password: "{{ item.password }}"
     role_attr_flags: "{{ item.attributes | join(',') }}"
   environment:
-    PGOPTIONS: "-c password_encryption=scram-sha-256"
+    PGOPTIONS: -c password_encryption=scram-sha-256
   with_items: "{{ users }}"
   become_user: postgres
   become: true
@@ -36,7 +36,7 @@
     password: "{{ replication_user.password }}"
     role_attr_flags: REPLICATION,LOGIN
   environment:
-    PGOPTIONS: "-c password_encryption=scram-sha-256"
+    PGOPTIONS: -c password_encryption=scram-sha-256
   become_user: postgres
   become: true
 
@@ -46,6 +46,6 @@
     password: "{{ pgpool_user.password }}"
     role_attr_flags: SUPERUSER
   environment:
-    PGOPTIONS: "-c password_encryption=scram-sha-256"
+    PGOPTIONS: -c password_encryption=scram-sha-256
   become_user: postgres
   become: true

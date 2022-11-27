@@ -1,12 +1,12 @@
 ---
 - name: Converge
   hosts: all
-  become: yes
+  become: true
   tasks:
     - name: Load variables
       ansible.builtin.include_vars:
         file: vars.yml
 
-    - name: "Include basic"
+    - name: Include Postrges
       ansible.builtin.include_role:
-        name: "postgres"
+        name: postgres

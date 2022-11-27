@@ -1,0 +1,87 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+platforms:
+  - name: postgres-master.local
+    box: romanow/ansible-box
+    box_version: 22.04
+    memory: 1024
+    cpus: 1
+    instance_raw_config_args:
+      - 'ssh.username = "ansible"'
+      - 'ssh.password = "root"'
+    interfaces:
+      - network_name: private_network
+        ip: 192.168.56.200
+    groups:
+      - database
+      - postgres
+      - master
+
+  - name: postgres-slave.local
+    box: romanow/ansible-box
+    box_version: 22.04
+    memory: 1024
+    cpus: 1
+    instance_raw_config_args:
+      - 'ssh.username = "ansible"'
+      - 'ssh.password = "root"'
+    interfaces:
+      - network_name: private_network
+        ip: 192.168.56.201
+    groups:
+      - database
+      - postgres
+      - slaves
+
+  - name: pgpool.local
+    box: romanow/ansible-box
+    box_version: 22.04
+    memory: 1024
+    cpus: 1
+    instance_raw_config_args:
+      - 'ssh.username = "ansible"'
+      - 'ssh.password = "root"'
+    interfaces:
+      - network_name: private_network
+        ip: 192.168.56.202
+    groups:
+      - database
+      - pgpool
+
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      vault_password_file: "${MOLECULE_SCENARIO_DIRECTORY}/.vault_pass"
+      allow_world_readable_tmpfiles: true
+  inventory:
+    links:
+      group_vars: "${MOLECULE_PROJECT_DIRECTORY}/inventories/local/group_vars/"
+    group_vars:
+      database:
+        master_ip_address: 192.168.56.200
+        database_subnet: 192.168.56.0/24
+        pgpool_ip_address: 192.168.56.202
+        postgres_instances: [ 192.168.56.200, 192.168.56.201 ]
+verifier:
+  name: ansible
+lint: |
+  yamllint .
+  ansible-lint
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - syntax
+    - create
+    - prepare
+    - converge
+    - verify
+    - cleanup
+    - destroy

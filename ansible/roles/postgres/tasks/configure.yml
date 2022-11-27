@@ -28,7 +28,6 @@
     file: access.yml
     apply:
       tags: [all, postgres, configure]
-
 - name: Configure Master node
   ansible.builtin.include_tasks:
     file: master.yml

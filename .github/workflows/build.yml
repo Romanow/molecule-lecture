@@ -16,27 +16,40 @@ jobs:
           terraform init
           terraform validate
 
-  ansible:
-    name: Ansible
-    runs-on: ubuntu-latest
+  #  ansible-roles:
+  #    name: Ansible Role tests
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/checkout@v3
+  #      - name: Install requirements
+  #        run: |-
+  #          pip3 install -r ansible/requirements.txt
+  #
+  #      - name: Test Roles
+  #        run: |-
+  #          shopt -s extglob
+  #
+  #          base_folder=$(pwd)
+  #          for dir in ansible/roles/*; do
+  #            cd "$dir"
+  #            molecule test
+  #            cd "$base_folder"
+  #          done
+  #        env:
+  #          PY_COLORS: '1'
+  #          ANSIBLE_FORCE_COLOR: '1'
+
+  ansible-playbook:
+    name: Ansible Playbook tests
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
       - name: Install requirements
         run: |-
           pip3 install -r ansible/requirements.txt
 
-      - name: Test Scenarious
-        run: |-
-          shopt -s extglob
-
-          base_folder=$(pwd)
-          for dir in ansible/roles/*; do
-            cd "$dir"
-            molecule test
-            cd "$base_folder"
-          done
+      - name: Test Playbooks
+        uses: gofrolist/molecule-action@v2
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-

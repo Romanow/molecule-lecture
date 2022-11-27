@@ -1,11 +1,11 @@
 ---
 # postgres playbook
 - hosts: postgres
-  become: yes
+  become: true
   roles:
     - postgres
 
 - hosts: pgpool
-  become: yes
+  become: true
   roles:
     - pgpool

@@ -5,6 +5,6 @@
     - name: Load variables
       ansible.builtin.include_vars:
         file: vars.yml
-    - name: "Include basic"
+    - name: Include basic
       ansible.builtin.include_role:
-        name: "basic"
+        name: basic
