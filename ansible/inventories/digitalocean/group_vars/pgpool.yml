@@ -1,7 +1,6 @@
 ---
 # inventories file pgpool local group
-pgpool_ip_address: "{{ groups['pgpool']| map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}"
-postgres_instances: "{{ groups['postgres'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | list }}"
+postgres_instances: "{{ groups['postgres'] | list }}"
 database_subnet: "0.0.0.0/0"
 
 firewall:
@@ -9,6 +8,11 @@ firewall:
   rules:
     - name: pgpool
       port: 9999
+      policy: allow
+      direction: in
+      protocol: tcp
+    - name: pcp
+      port: 9898
       policy: allow
       direction: in
       protocol: tcp

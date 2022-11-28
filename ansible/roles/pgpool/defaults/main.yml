@@ -8,8 +8,9 @@ postgres:
 
 pgpool:
   version: 4.2
-  listen_port: 9999
   listen_address: "*"
+  listen_port: 9999
+  pcp_listen_port: 9898
   conf_dir: /etc/pgpool2
   run_dir: /var/run/pgpool2
   log_dir: /var/log/pgpool2

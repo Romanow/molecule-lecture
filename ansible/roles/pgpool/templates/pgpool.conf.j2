@@ -4,10 +4,14 @@
 
 backend_clustering_mode = 'streaming_replication'
 
-listen_addresses = {{ pgpool.listen_address }}
+listen_addresses = '{{ pgpool.listen_address }}'
+pcp_listen_addresses = '{{ pgpool.listen_address }}'
+
 port = {{ pgpool.listen_port }}
+pcp_port = {{ pgpool.pcp_listen_port }}
 
 pid_file_name = '{{ pgpool.run_dir }}/pgpool.pid'
+pcp_socket_dir = '{{ pgpool.run_dir }}'
 
 #------------------------------------------------------------------------------
 # BACKENDS
@@ -19,7 +23,6 @@ backend_port{{ loop.index0 }} = {{ postgres.listen_port }}
 backend_weight{{ loop.index0 }} = 1
 backend_data_directory{{ loop.index0 }} = '{{ postgres.data_dir }}'
 backend_flag{{ loop.index0 }} = 'ALLOW_TO_FAILOVER'
-backend_application_name{{ loop.index0 }} = 'server{{ loop.index }}'
 {% endfor %}
 
 #------------------------------------------------------------------------------
@@ -42,6 +45,23 @@ backend_application_name{{ loop.index0 }} = 'server{{ loop.index }}'
 #   %S = old primary node port number
 #   %% = '%' character
 failover_command = '{{ pgpool.conf_dir }}/failover.sh %d %h %p %D %m %H %M %P %r %R %N %S'
+
+# Executes this command after main node failover
+# Special values:
+#   %d = failed node id
+#   %h = failed node host name
+#   %p = failed node port number
+#   %D = failed node database cluster path
+#   %m = new main node id
+#   %H = new main node hostname
+#   %M = old main node id
+#   %P = old primary node id
+#   %r = new main port number
+#   %R = new main database cluster path
+#   %N = old primary node hostname
+#   %S = old primary node port number
+#   %% = '%' character
+follow_primary_command = '{{ pgpool.conf_dir }}/follow_primary.sh %d %h %p %D %m %H %M %P %r %R
 
 # Initiates failover when reading/writing to the backend communication socket fails. If set to off,
 # pgpool will report an error and disconnect the session.

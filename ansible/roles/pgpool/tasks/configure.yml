@@ -25,7 +25,15 @@
     dest: "{{ pgpool.conf_dir }}/failover.sh"
     owner: postgres
     group: postgres
-    mode: 0640
+    mode: 0750
+
+- name: Configure follow_primary.sh
+  ansible.builtin.template:
+    src: templates/failover.sh.j2
+    dest: "{{ pgpool.conf_dir }}/follow_primary.sh"
+    owner: postgres
+    group: postgres
+    mode: 0750
 
 - name: Configure access
   community.postgresql.postgresql_pg_hba:
@@ -50,31 +58,38 @@
   become_user: postgres
   become: true
 
-- name: Configure passwords
+- name: Configure user passwords
   ansible.builtin.shell: pg_enc -m -k {{ postgres.home_dir }}/.pgpoolkey -u {{ item.name }} {{ item.password }}
   with_items:
     - "{{ replication_user }}"
     - "{{ pgpool_user }}"
     - "{{ users }}"
 
+- name: Configure PCP password
+  block:
+    - name: Calculate pgpool user password
+      ansible.builtin.shell: "pg_md5 {{ vault_pgpool_passwd }}"
+      register: pgpool_md5_password
+
+    - name: Copy password to pcp.conf
+      ansible.builtin.copy:
+        content: "pgpool:{{ pgpool_md5_password.stdout_lines }}"
+        dest: "{{ pgpool.conf_dir }}/pcp.conf"
+        owner: root
+        group: root
+        mode: 0644
+
+- name: Configure passwordless ssh access to Postrges
+  ansible.builtin.include_tasks:
+    file: ssh.yml
+    apply:
+      tags: [ all, pgpool, configure ]
+  with_items:
+    - postgres
+    - root
+  when: vault_pgpool_private_key is defined
+
 - name: Restart PgPool II
   ansible.builtin.service:
     name: pgpool2
     state: restarted
-
-#[all servers]# mkdir ~/.ssh
-#[all servers]# chmod 700 ~/.ssh
-#[all servers]# cd ~/.ssh
-#[all servers]# ssh-keygen -t rsa -f id_rsa_pgpool
-#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server1
-#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server2
-#[all servers]# ssh-copy-id -i id_rsa_pgpool.pub postgres@server3
-#
-#[all servers]# su - postgres
-#[all servers]$ mkdir ~/.ssh
-#[all servers]$ chmod 700 ~/.ssh
-#[all servers]$ cd ~/.ssh
-#[all servers]$ ssh-keygen -t rsa -f id_rsa_pgpool
-#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server1
-#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server2
-#[all servers]$ ssh-copy-id -i id_rsa_pgpool.pub postgres@server3

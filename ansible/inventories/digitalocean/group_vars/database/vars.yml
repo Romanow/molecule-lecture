@@ -1,5 +1,8 @@
 ---
 # inventories file database local group
+pgpool_enabled: true
+pgpool_ip_address: "{{ groups['pgpool'] | first }}"
+
 users:
   - name: program
     database: orders

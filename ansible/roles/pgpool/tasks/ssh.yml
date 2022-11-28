@@ -1,0 +1,31 @@
+---
+# ssh task for pgpool
+- name: Ensure .ssh directory exists
+  become: yes
+  become_user: "{{ item }}"
+  ansible.builtin.file:
+    dest: "~/.ssh"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0700
+    state: directory
+
+- name: Install SSH public key
+  become: yes
+  become_user: "{{ item }}"
+  ansible.builtin.copy:
+    content: "{{ pgpool_public_key }}"
+    dest: "~/.ssh/id_rsa_pgpool.pub"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0644
+
+- name: Install SSH private key
+  become: yes
+  become_user: "{{ item }}"
+  ansible.builtin.copy:
+    content: "{{ vault_pgpool_private_key }}"
+    dest: "~/.ssh/id_rsa_pgpool"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0600

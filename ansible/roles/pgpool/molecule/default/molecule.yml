@@ -64,8 +64,9 @@ provisioner:
       database:
         master_ip_address: 192.168.1.10
         database_subnet: 192.168.1.0/24
-        pgpool_ip_address: 192.168.1.12
         postgres_instances: [ 192.168.1.10, 192.168.1.11 ]
+        pgpool:
+          ip_address: 192.168.1.12
 verifier:
   name: ansible
 lint: |
