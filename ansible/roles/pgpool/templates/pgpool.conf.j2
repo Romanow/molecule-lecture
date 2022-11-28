@@ -61,7 +61,7 @@ failover_command = '{{ pgpool.conf_dir }}/failover.sh %d %h %p %D %m %H %M %P %r
 #   %N = old primary node hostname
 #   %S = old primary node port number
 #   %% = '%' character
-follow_primary_command = '{{ pgpool.conf_dir }}/follow_primary.sh %d %h %p %D %m %H %M %P %r %R
+follow_primary_command = '{{ pgpool.conf_dir }}/follow_primary.sh %d %h %p %D %m %H %M %P %r %R'
 
 # Initiates failover when reading/writing to the backend communication socket fails. If set to off,
 # pgpool will report an error and disconnect the session.
