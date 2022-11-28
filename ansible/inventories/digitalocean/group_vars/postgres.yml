@@ -1,7 +1,7 @@
 ---
 # inventories file postgres local group
-master_ip_address: "{{ hostvars['postgres-master.local']['ansible_host'] }}"
-database_subnet: "{{ ''.join((master_ip_address, '/16')) | ansible.utils.ipaddr('network/prefix') }}"
+master_ip_address: "{{ groups['master']| map('extract', hostvars, ['ansible_default_ipv4','address']) | first }}"
+database_subnet: "0.0.0.0/0"
 
 firewall:
   enabled: true
