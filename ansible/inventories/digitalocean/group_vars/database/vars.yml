@@ -2,6 +2,7 @@
 # inventories file database local group
 pgpool_enabled: true
 pgpool_ip_address: "{{ groups['pgpool'] | first }}"
+pgpool_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBx7e38ggztYOnjRF5oQNuY+xlf2+8/30XrBFRfs+vwXzFu6D+Xd1xJxbuBlsdX1LJj5mtjU7wyA6ZGIlG//BYp5JcIfMvVw0GIy6vRLgSwW/ci36Q+UMbiuDd+fQxX+HJkDNc/Gszi7xbEsoD3RFkVkb40IrbqIOfhckHXOcYKZ5duMCrL7icRll+BZkXBrgFFKx6kh5MrxU6Fwdz8NI3CoyCV4Y4yEhEXnCQGhxia7Fm56vwfa8e4e9aNUwXbgW1wL8svhCITd6rln7uuvfOGBILStcK1gSBpYSAjELBznlw+ssAg6GUgbNh4MnVjEveBEmbtjQ31EUk2tDkZcolVsDgl8j9pwaBCFqhJYEuLVCdSG9G+1lT7NVRx+cHznRDUMfqcHbSK4K/lr8f54X0p6j1+A1C0BlOlMWpC0vJ63OOxovyw25R3yEMuxZ1Bx15/nf5VuAVaM6TDcW+IavxhUmRTs+gGvGdZy8/MjblC+dsaIZ5AXHmdJaep7Z3RDk= aromanov@aromanov.local"
 
 users:
   - name: program

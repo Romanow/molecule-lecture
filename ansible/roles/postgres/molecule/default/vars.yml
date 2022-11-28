@@ -1,6 +1,7 @@
 ---
 basic_packages: [ ]
 user_accounts: [ ]
+pgpool_enabled: false
 firewall:
   enabled: false
   rules: [ ]
