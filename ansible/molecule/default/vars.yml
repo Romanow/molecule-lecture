@@ -1,0 +1,5 @@
+---
+master_ip_address: 192.168.56.200
+database_subnet: 192.168.56.0/24
+pgpool_ip_address: 192.168.56.202
+postgres_instances: [ 192.168.56.200, 192.168.56.201 ]

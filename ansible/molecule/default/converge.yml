@@ -1,10 +1,12 @@
 ---
 - hosts: postgres
   become: yes
+  vars_files: vars.yml
   roles:
     - role: roles/postgres
 
 - hosts: pgpool
   become: yes
+  vars_files: vars.yml
   roles:
     - role: roles/pgpool

@@ -1,10 +1,7 @@
 ---
-- name: Converge
-  hosts: all
+- hosts: all
+  vars_files: vars.yml
   tasks:
-    - name: Load variables
-      ansible.builtin.include_vars:
-        file: vars.yml
     - name: Include basic
       ansible.builtin.include_role:
         name: basic
