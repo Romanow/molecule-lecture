@@ -65,7 +65,7 @@ follow_primary_command = '{{ pgpool.conf_dir }}/follow_primary.sh %d %h %p %D %m
 
 # Initiates failover when reading/writing to the backend communication socket fails. If set to off,
 # pgpool will report an error and disconnect the session.
-failover_on_backend_error = on
+failover_on_backend_error = off
 
 # Initiates failover when backend is shutdown, or backend process is killed.
 # If set to off, pgpool will report an error and disconnect the session.

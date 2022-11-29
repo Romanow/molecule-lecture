@@ -1,5 +1,12 @@
 ---
 # master task for postgres
+- name: Create databases
+  community.postgresql.postgresql_db:
+    name: "{{ item.name }}"
+  with_items: "{{ databases }}"
+  become_user: postgres
+  become: true
+
 - name: Create users
   community.postgresql.postgresql_user:
     name: "{{ item.name }}"
@@ -11,13 +18,15 @@
   become_user: postgres
   become: true
 
-- name: Create databases
-  community.postgresql.postgresql_db:
-    name: "{{ item.name }}"
-
-  with_items: "{{ databases }}"
-  become_user: postgres
-  become: true
+- name: Configure user access
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
+    contype: host
+    method: scram-sha-256
+    databases: "{{ item.database }}"
+    users: "{{ item.name }}"
+    source: 0.0.0.0/0
+  with_items: "{{ users }}"
 
 - name: Grant privileges to users
   community.postgresql.postgresql_privs:
@@ -40,6 +49,15 @@
   become_user: postgres
   become: true
 
+- name: Configure replication access
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
+    contype: host
+    method: scram-sha-256
+    databases: "{{ replication_user.database }}"
+    users: "{{ replication_user.name }}"
+    source: "{{ database_subnet }}"
+
 - name: Create PgPool user
   community.postgresql.postgresql_user:
     name: "{{ pgpool_user.name }}"
@@ -49,3 +67,18 @@
     PGOPTIONS: -c password_encryption=scram-sha-256
   become_user: postgres
   become: true
+
+- name: Configure PgPool access
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ postgres.conf_dir }}/pg_hba.conf"
+    contype: host
+    method: scram-sha-256
+    databases: "{{ pgpool_user.database }}"
+    users: "{{ pgpool_user.name }}"
+    source: "{{ database_subnet }}"
+  when: pgpool_user is defined
+
+- name: Restart Postgres
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted

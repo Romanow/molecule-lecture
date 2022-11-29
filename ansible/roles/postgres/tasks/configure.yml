@@ -18,14 +18,9 @@
     group: postgres
     mode: 0644
 
-- name: Restart Postgres
-  ansible.builtin.service:
-    name: postgresql
-    state: restarted
-
-- name: Configure access
+- name: Configure users
   ansible.builtin.include_tasks:
-    file: access.yml
+    file: users.yml
     apply:
       tags: [ all, postgres, configure ]
 
@@ -46,13 +41,6 @@
   become_user: postgres
   become: true
   when: pgpool_enabled
-
-- name: Configure Master node
-  ansible.builtin.include_tasks:
-    file: master.yml
-    apply:
-      tags: [ all, postgres, configure ]
-  when: "'master' in group_names"
 
 - name: Configure Slaves node
   ansible.builtin.include_tasks:
