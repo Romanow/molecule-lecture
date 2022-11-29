@@ -34,7 +34,7 @@
     key: "{{ pgpool_public_key }}"
     user: postgres
     state: present
-  when: pgpool_enabled and pgpool_public_key is defined
+  when: pgpool_enabled
 
 - name: Configure PCP passwordless access
   ansible.builtin.copy:
