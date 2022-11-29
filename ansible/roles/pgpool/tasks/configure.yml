@@ -73,7 +73,7 @@
 
     - name: Copy password to pcp.conf
       ansible.builtin.copy:
-        content: "pgpool:{{ pgpool_md5_password.stdout_lines }}"
+        content: "pgpool:{{ pgpool_md5_password.stdout }}"
         dest: "{{ pgpool.conf_dir }}/pcp.conf"
         owner: root
         group: root

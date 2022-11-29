@@ -6,6 +6,10 @@ firewall:
   rules: [ ]
 databases: [ ]
 users: [ ]
+
+pgpool_public_key: ""
+vault_pgpool_private_key: ""
+
 replication_user:
   name: replication
   database: replication
