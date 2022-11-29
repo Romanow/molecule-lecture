@@ -39,7 +39,7 @@
 - name: Configure PCP passwordless access
   ansible.builtin.copy:
     dest: "~/.pcppass"
-    content: "{{ pgpool_ip_address }}:9898:pgpool:{{ vault_pgpool_passwd }}"
+    content: "{{ pgpool_ip_address }}:9898:pgpool:{{ pgpool_user.password }}"
     owner: postgres
     group: postgres
     mode: 0600
