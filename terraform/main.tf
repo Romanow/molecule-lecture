@@ -1,5 +1,5 @@
-data "digitalocean_image" "ubuntu" {
-  name = "ansible-box-ubuntu-2204"
+data "digitalocean_droplet_snapshot" "ubuntu" {
+  name = "ubuntu-22.04-01-12-2022"
 }
 
 data "digitalocean_ssh_key" "main" {
@@ -9,14 +9,14 @@ data "digitalocean_ssh_key" "main" {
 locals {
   tags = [
     ["postgres", "master"],
-    ["postgres", "slave"],
+    ["postgres", "slaves"],
     ["pgpool"]
   ]
 }
 
 resource "digitalocean_droplet" "vm" {
   count    = 3
-  image    = data.digitalocean_image.ubuntu.id
+  image    = data.digitalocean_droplet_snapshot.ubuntu.id
   name     = "vm-${var.names[count.index]}"
   region   = var.vm_region
   size     = var.vm_size
