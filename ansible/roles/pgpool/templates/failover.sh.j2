@@ -32,6 +32,7 @@ OLD_PRIMARY_NODE_HOST="${11}"
 OLD_PRIMARY_NODE_PORT="${12}"
 
 PGHOME="{{ postgres.data_dir }}"
+PG_CTL_BIN=/usr/lib/postgresql/15/bin
 REPL_SLOT_NAME=${FAILED_NODE_HOST//[-.]/_}
 POSTGRESQL_STARTUP_USER=postgres
 SSH_KEY_FILE=id_rsa_pgpool
@@ -73,7 +74,7 @@ fi
 ## Promote Standby node.
 echo failover.sh: primary node is down, promote new_main_node_id=$NEW_MAIN_NODE_ID on ${NEW_MAIN_NODE_HOST}.
 
-ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NEW_MAIN_NODE_HOST} ${PGHOME}/bin/pg_ctl -D ${NEW_MAIN_NODE_PGDATA} -w promote
+ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NEW_MAIN_NODE_HOST} ${PG_CTL_BIN}/pg_ctl -D ${NEW_MAIN_NODE_PGDATA} -w promote
 
 if [ $? -ne 0 ]; then
     echo ERROR: failover.sh: end: failover failed
