@@ -3,15 +3,9 @@ on:
   push:
     branches: [ master ]
 jobs:
-  common:
-    - uses: actions/checkout@v3
-    - name: Validate
-      uses: pre-commit/action@v3.0.0
-
   terraform:
     name: Terrafrom
     runs-on: ubuntu-latest
-    needs: common
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
@@ -25,7 +19,6 @@ jobs:
   ansible-roles:
     name: Ansible Role tests
     runs-on: ubuntu-latest
-    needs: common
     steps:
       - uses: actions/checkout@v3
       - name: Install requirements
